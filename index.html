@@ -18,6 +18,22 @@
             padding: 0;
             margin: 0;
         }
+        /* Estilos para los puntos de color en la leyenda */
+        .legend-point {
+            display: inline-block;
+            width: 10px; /* Tamaño del punto */
+            height: 10px;
+            margin-right: 5px;
+            border-radius: 50%; /* Forma de círculo */
+            border: 1px solid #333; /* Borde para visibilidad */
+            vertical-align: middle;
+        }
+        .green { background-color: rgba(84,205,66,1.0); } /* Apoyo Conservación */
+        .white { background-color: rgba(255,255,255,1.0); } /* Apoyo Privadas */
+        .yellow { background-color: rgba(255,241,0,1.0); } /* Educación y Difusión */
+        .blue { background-color: rgba(0,240,255,1.0); } /* Monitoreo o Muestreo */
+        .red { background-color: rgba(255,0,24,1.0); } /* Reducción y Mitigación */
+        .magenta { background-color: rgba(255,0,205,1.0); } /* Relación Güiña-Humanos */
         </style>
         <title></title>
     </head>
@@ -393,7 +409,7 @@
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
         // =========================================================================
-        // DOBLE LEYENDA SEPARADA
+        // DOBLE LEYENDA SEPARADA con PUNTOS DE COLOR ESTILIZADOS
         // =========================================================================
 
         // 4a. Estructura de la Leyenda de Iniciativas
@@ -402,12 +418,18 @@
                 label: '🐾 **Iniciativas**', 
                 selectAllCheckbox: true, 
                 children: [
-                    {label: 'Apoyo a Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
-                    {label: 'Apoyo a Iniciativas Privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
-                    {label: 'Educación y Difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
-                    {label: 'Monitoreo o Muestreo de la Especie <img src="legend/temp5_2_Monitoreoomuestreodelaespecie3.png" />', layer: layer_MonitoreoMuestreo},
-                    {label: 'Reducción y Mitigación de Amenazas <img src="legend/temp5_2_Reduccinomitigacindeamenazas4.png" />', layer: layer_ReduccionMitigacion},
-                    {label: 'Relación Güiña-Humanos (Relevamiento) <img src="legend/temp5_2_Relevamientodeinformacionsobrerelacionguignahumanos5.png" />', layer: layer_RelevamientoGuignaHumanos},
+                    // PUNTO VERDE añadido aquí
+                    {label: '<span class="legend-point green"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion},
+                    // PUNTO BLANCO añadido aquí
+                    {label: '<span class="legend-point white"></span> Apoyo a Iniciativas Privadas', layer: layer_ApoyoPrivadas},
+                    // PUNTO AMARILLO añadido aquí
+                    {label: '<span class="legend-point yellow"></span> Educación y Difusión', layer: layer_EducacionDifusion},
+                    // PUNTO AZUL añadido aquí
+                    {label: '<span class="legend-point blue"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo},
+                    // PUNTO ROJO añadido aquí
+                    {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion},
+                    // PUNTO MAGENTA añadido aquí
+                    {label: '<span class="legend-point magenta"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos},
                 ]
             }
         ];
@@ -426,14 +448,14 @@
         // 5a. Control de Leyenda para Iniciativas (posición superior derecha)
         var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
             collapsed: true,
-            position: 'topright' // Puedes ajustar la posición
+            position: 'topright'
         });
         layIniciativas.addTo(map);
 
         // 5b. Control de Leyenda para Mapas Base (posición inferior derecha)
         var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, {
             collapsed: true,
-            position: 'bottomright' // Puedes ajustar la posición
+            position: 'bottomright'
         });
         layMapasBase.addTo(map);
         
