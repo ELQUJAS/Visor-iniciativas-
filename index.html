@@ -152,6 +152,7 @@
         layer_GoogleSatellite_1;
         map.addLayer(layer_GoogleSatellite_1);
 
+        // FUNCIÓN POP-UP MODIFICADA
         function pop_temp5_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -165,15 +166,15 @@
             });
             var popupContent = '<table>\
                         <tr>\
-                            <th scope="row">Categorias</th>\
+                            <th scope="row">Categorías:</th>\
                             <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                         </tr>\
                         <tr>\
-                            <th scope="row">Descrip_</th>\
+                            <th scope="row">Descripción:</th>\
                             <td>' + (feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                         </tr>\
                         <tr>\
-                            <th scope="row">Academicos</th>\
+                            <th scope="row">Académicos:</th>\
                             <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                         </tr>\
                     </table>';
@@ -184,10 +185,6 @@
             layer.bindPopup(content, { maxHeight: 400 });
         }
         
-        // =========================================================================
-        // SECCIÓN DE ESTILOS Y FILTROS PARA CAPAS INDIVIDUALES (SIN CAMBIOS AQUÍ)
-        // =========================================================================
-
         // 1. Funciones de Estilo Individual
         function style_ApoyoConservacion(feature) {
             return {
@@ -395,10 +392,7 @@
         bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
-        // =========================================================================
-        // SECCIÓN MEJORADA ESTÉTICAMENTE Y REORGANIZADA
-        // =========================================================================
-
+        // 4. Estructura de la Leyenda REORGANIZADA
         var overlaysTree = [
             {
                 label: '🐾 **Iniciativas y Conservación**', 
@@ -425,8 +419,6 @@
             collapsed: true,
         });
         lay.addTo(map);
-        
-        // =========================================================================
         
         setBounds();
         </script>
