@@ -30,12 +30,12 @@
             vertical-align: middle;
         }
         /* Definición de colores por categoría */
-        .green { background-color: rgba(84,205,66,1.0); } /* Apoyo Conservación */
-        .white { background-color: rgba(255,255,255,1.0); } /* Apoyo Privadas */
-        .yellow { background-color: rgba(255,241,0,1.0); } /* Educación y Difusión */
-        .blue { background-color: rgba(0,240,255,1.0); } /* Monitoreo o Muestreo */
-        .red { background-color: rgba(255,0,24,1.0); } /* Reducción y Mitigación */
-        .magenta { background-color: rgba(255,0,205,1.0); } /* Relación Güiña-Humanos */
+        .green { background-color: rgba(84,205,66,1.0); } 
+        .white { background-color: rgba(255,255,255,1.0); } 
+        .yellow { background-color: rgba(255,241,0,1.0); } 
+        .blue { background-color: rgba(0,240,255,1.0); } 
+        .red { background-color: rgba(255,0,24,1.0); } 
+        .magenta { background-color: rgba(255,0,205,1.0); } 
         
         /* [CSS para Leyendas] */
         .leaflet-bottom { position: fixed; }
@@ -95,7 +95,7 @@
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
         
-        // [Funciones auxiliares para Pop-up - Asumimos que el cuerpo de estas funciones está en el archivo original]
+        // [Funciones auxiliares para Pop-up]
         function removeEmptyRowsFromPopupContent(content, feature) { 
            var tempDiv = document.createElement('div');
            tempDiv.innerHTML = content;
@@ -161,12 +161,36 @@
         layer_GoogleSatellite_1;
         map.addLayer(layer_GoogleSatellite_1);
 
-        // FUNCIÓN POP-UP (Corregido a "Categoría")
+        // =========================================================================
+        // FUNCIÓN POP-UP (CON TRES CONDICIONES DE DESCRIPCIÓN ACTUALIZADAS)
+        // =========================================================================
         function pop_temp5_2(feature, layer) {
             layer.on({
                 mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') { e.target._eventParents[i].resetStyle(e.target); } } },
                 mouseover: highlightFeature,
             });
+
+            var descripcionTexto;
+            var categoria = feature.properties['Categorias'];
+            var academicos = feature.properties['Academicos'];
+            
+            // 1. CONDICIÓN: Monitoreo o muestreo de la especie (Diego Ramirez)
+            if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
+                descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
+            } 
+            // 2. CONDICIÓN: Monitoreo o muestreo de la especie (Beltrami)
+            else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Beltrami') {
+                descripcionTexto = 'Sub-temas: Parámetros i, ii, iii y iv. Se está coordinando y definiendo realizar una actualización de parametros poblacionales en Reserva de la Biósfera La Campana-Peñuelas, comenzando por esta zona de Casablanca';
+            } 
+            // 3. CONDICIÓN DETALLADA: Reducción o mitigación de amenazas (Jose Caro)
+            else if (categoria === 'Reducción o mitigación de amenazas' && academicos === 'Jose Caro') {
+                descripcionTexto = 'Operativo Veterinario de mascotas<br><br>c. Vacunación:<br><br>A partir de los fondos disponibles de la Sebsecretaría de Desarrollo Regional (SUBDERE) para la vacunación y esterilización de mascotas, Guardaparques del Parque Nacional Radal Siete Tazas gestionan la posibilidad de otorgar a la localidad de Radal, como una zona prioritaria para implementar este programa en la comunda de Molina. Para ello, Guardaparques gestionan con la Dirección de Desarrollo Comunal de Molina (DIDECO) el operativo veterinario en Radal y colaboran en la coordinación den terreno a través de la Junta de vecinos. En total se abordaron más de 30 mascotas, aunque en su gran mayoría fueron perros, teniendo muchos problemas para la vacunación de gatos debido a la dificultad de sus dueños para manipularlos. Fecha: 2019.';
+            } 
+            // 4. VALOR POR DEFECTO: Usa el valor del atributo original
+            else {
+                descripcionTexto = feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '';
+            }
+
             var popupContent = '<table>\
                         <tr>\
                             <th scope="row">Categoría:</th>\
@@ -174,19 +198,20 @@
                         </tr>\
                         <tr>\
                             <th scope="row">Descripción:</th>\
-                            <td>' + (feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                            <td>' + descripcionTexto + '</td>\
                         </tr>\
                         <tr>\
                             <th scope="row">Académicos:</th>\
                             <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                         </tr>\
                     </table>';
+                    
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
             layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
             layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); 
         }
         
-        // Funciones de Estilo Individual (RESTAURADAS)
+        // [Funciones de Estilo Individual y Creación de Capas - RESTAURADAS]
         function style_ApoyoConservacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(84,205,66,1.0)', interactive: true, } }
         function style_ApoyoPrivadas(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,255,255,1.0)', interactive: true, } }
         function style_EducacionDifusion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,241,0,1.0)', interactive: true, } }
@@ -195,7 +220,6 @@
         function style_RelevamientoGuignaHumanos(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,205,1.0)', interactive: true, } }
         function filterFeature(category) { return function(feature) { return feature.properties.Categorias === category; } }
 
-        // Creación de Capas (RESTAURADAS)
         map.createPane('pane_temp5_2');
         map.getPane('pane_temp5_2').style.zIndex = 402;
         map.getPane('pane_temp5_2').style['mix-blend-mode'] = 'normal';
@@ -220,10 +244,9 @@
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
         // =========================================================================
-        // LEYENDAS (RESTAURADAS)
+        // LEYENDAS
         // =========================================================================
 
-        // Estructura de la Leyenda de Categorías
         var overlaysTree_iniciativas = [
             {
                 label: '🐾 **Categorías**', 
@@ -239,7 +262,6 @@
             }
         ];
         
-        // Estructura de la Leyenda de Mapas Base 
         var overlaysTree_mapasbase = [
             {
                 label: '🌍 **Mapas Base**', 
@@ -250,7 +272,6 @@
             }
         ];
 
-        // Inicialización de controles de leyenda
         var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, { collapsed: true, position: 'topright' });
         layMapasBase.addTo(map);
         var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, { collapsed: false, position: 'bottomright'});
