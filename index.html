@@ -34,6 +34,31 @@
         .blue { background-color: rgba(0,240,255,1.0); } /* Monitoreo o Muestreo */
         .red { background-color: rgba(255,0,24,1.0); } /* Reducción y Mitigación */
         .magenta { background-color: rgba(255,0,205,1.0); } /* Relación Güiña-Humanos */
+        
+        /* ========================================================================= */
+        /* CSS para la Leyenda de Iniciativas (Más transparencia, Fija abajo)        */
+        /* ========================================================================= */
+        
+        /* La clase 'leaflet-bottom' asegura que el contenedor esté en la parte inferior */
+        .leaflet-bottom {
+            /* Fija la posición en la pantalla, independientemente del mapa */
+            position: fixed; 
+        }
+
+        /* Ajusta el fondo del panel expandido de las iniciativas */
+        /* Seleccionamos el control de la esquina inferior derecha */
+        .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree {
+            /* Transparencia (RGBA: el 4to valor (0.8) es la opacidad) */
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Opcional: Borde más claro */
+            border: 1px solid rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Mantenemos el ícono de colapso con fondo sólido para que se vea claro */
+        .leaflet-bottom.leaflet-right .leaflet-control-layers-toggle {
+            background-color: #fff;
+        }
+
         </style>
         <title></title>
     </head>
@@ -409,32 +434,26 @@
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
         // =========================================================================
-        // DOBLE LEYENDA SEPARADA con PUNTOS DE COLOR ESTILIZADOS
+        // DOBLE LEYENDA SEPARADA con POSICIONES INTERCAMBIADAS
         // =========================================================================
 
-        // 4a. Estructura de la Leyenda de Iniciativas
+        // 4a. Estructura de la Leyenda de Iniciativas (posición: inferior derecha)
         var overlaysTree_iniciativas = [
             {
                 label: '🐾 **Iniciativas**', 
                 selectAllCheckbox: true, 
                 children: [
-                    // PUNTO VERDE añadido aquí
                     {label: '<span class="legend-point green"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion},
-                    // PUNTO BLANCO añadido aquí
                     {label: '<span class="legend-point white"></span> Apoyo a Iniciativas Privadas', layer: layer_ApoyoPrivadas},
-                    // PUNTO AMARILLO añadido aquí
                     {label: '<span class="legend-point yellow"></span> Educación y Difusión', layer: layer_EducacionDifusion},
-                    // PUNTO AZUL añadido aquí
                     {label: '<span class="legend-point blue"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo},
-                    // PUNTO ROJO añadido aquí
                     {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion},
-                    // PUNTO MAGENTA añadido aquí
                     {label: '<span class="legend-point magenta"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos},
                 ]
             }
         ];
         
-        // 4b. Estructura de la Leyenda de Mapas Base
+        // 4b. Estructura de la Leyenda de Mapas Base (posición: superior derecha)
         var overlaysTree_mapasbase = [
             {
                 label: '🌍 **Mapas Base**', 
@@ -445,19 +464,19 @@
             }
         ];
 
-        // 5a. Control de Leyenda para Iniciativas (posición superior derecha)
-        var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
-            collapsed: true,
-            position: 'topright'
-        });
-        layIniciativas.addTo(map);
-
-        // 5b. Control de Leyenda para Mapas Base (posición inferior derecha)
+        // 5a. Control de Leyenda para Mapas Base (POSICIÓN ARRIBA)
         var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, {
             collapsed: true,
-            position: 'bottomright'
+            position: 'topright' 
         });
         layMapasBase.addTo(map);
+        
+        // 5b. Control de Leyenda para Iniciativas (POSICIÓN ABAJO)
+        var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
+            collapsed: true,
+            position: 'bottomright' // Esto hace que el contenedor padre sea 'leaflet-bottom leaflet-right'
+        });
+        layIniciativas.addTo(map);
         
         // =========================================================================
         
