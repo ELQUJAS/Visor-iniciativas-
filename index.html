@@ -37,7 +37,7 @@
         .magenta { background-color: rgba(255,0,205,1.0); } /* Relación Güiña-Humanos */
         
         /* ========================================================================= */
-        /* CSS para la Leyenda de Iniciativas (Más transparencia, Fija abajo)        */
+        /* CSS para la Leyenda de Iniciativas (Fija abajo y Expandida)               */
         /* ========================================================================= */
         
         /* La clase 'leaflet-bottom' asegura que el contenedor esté en la parte inferior */
@@ -47,11 +47,9 @@
         }
 
         /* Ajusta el fondo del panel expandido de las iniciativas */
-        /* Seleccionamos el control de la esquina inferior derecha */
         .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree {
             /* Transparencia (RGBA: el 4to valor (0.8) es la opacidad) */
             background-color: rgba(255, 255, 255, 0.8);
-            /* Opcional: Borde más claro */
             border: 1px solid rgba(0, 0, 0, 0.2); 
         }
 
@@ -66,7 +64,7 @@
              padding-top: 10px;
         }
         
-        /* Ajuste para el visor de coordenadas para que no se superponga con otros controles */
+        /* Ajuste para el visor de coordenadas (bottomleft) */
         .leaflet-container .leaflet-control-coordinates {
             background-color: rgba(255, 255, 255, 0.8); /* Fondo transparente */
             padding: 5px 8px;
@@ -454,7 +452,7 @@
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
         // =========================================================================
-        // LEYENDAS
+        // LEYENDAS (SIN CAMBIOS)
         // =========================================================================
 
         // 4a. Estructura de la Leyenda de Iniciativas 
@@ -486,49 +484,37 @@
 
         // 5a. Control de Leyenda para Mapas Base (POSICIÓN ARRIBA)
         var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, {
-            collapsed: true, // Se mantiene colapsable
+            collapsed: true, 
             position: 'topright' 
         });
         layMapasBase.addTo(map);
         
         // 5b. Control de Leyenda para Iniciativas (POSICIÓN ABAJO Y FIJA/EXPANDIDA)
         var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
-            collapsed: false, // Fija la leyenda en estado expandido
+            collapsed: false, 
             position: 'bottomright'
         });
         layIniciativas.addTo(map);
         
         // =========================================================================
-        // VISOR DE COORDENADAS (Lat/Lon y UTM)
+        // 6. VISOR DE COORDENADAS CORREGIDO (Lat/Lon)
         // =========================================================================
         L.control.coordinates({
             position: "bottomleft", // Ubicación del control
-            decimals: 4,           // Número de decimales para Lat/Lon
+            decimals: 4,           // Número de decimales
             decimalSeperator: ".", // Separador decimal
             labelTemplateLat: "Lat: {y}", // Etiqueta para latitud
             labelTemplateLng: "Lon: {x}", // Etiqueta para longitud
             enableUserInput: false, // No permite entrada manual
-            use ");          // Usa las coordenadas del evento
-            use );             // Usa las coordenadas del evento
-            // customLabelFcn: function(lat, lng, name) {
-            //     // Para mostrar UTM, necesitamos una función de conversión
-            //     // No hay una conversión UTM integrada directamente en esta librería,
-            //     // pero podemos añadir una conversión simple si es necesario.
-            //     // Por ahora, mostrará Lat/Lon y un marcador al hacer clic.
-            //     return "Lat: " + lat.toFixed(4) + ", Lon: " + lng.toFixed(4);
-            // }
-            // Para mostrar UTM, se necesita una función externa de conversión
-            // o buscar una librería más específica para ello.
-            // La librería Leaflet.Coordinates no tiene conversión UTM nativa.
-            // Sin embargo, podemos simularlo mostrando un mensaje o integrando
-            // una librería UTM si es esencial.
-            // Por el momento, se mostrará Lat/Lon del mouse.
+            use: false,             // **CORREGIDO: Eliminar opciones erróneas**
+            center: false,
+            latfirst: false,
+            // Simplemente activa el visor de Lat/Lon del cursor
         }).addTo(map);
-
-        // Para UTM en Leaflet, a menudo se requiere una librería adicional o una función de conversión manual.
-        // La librería Leaflet.Coordinates no incluye conversión UTM directamente.
-        // Si necesitas UTM de forma precisa, deberías considerar integrar algo como 'proj4leaflet'.
-        // Aquí dejo un marcador de posición para futuras integraciones si es necesario.
+        
+        // NOTA sobre UTM: La conversión UTM no es nativa en esta librería.
+        // Si necesitas UTM, se requiere una librería de proyección adicional (ej. proj4leaflet).
+        // Por ahora, el visor mostrará Latitud/Longitud del cursor.
 
         setBounds();
         </script>
