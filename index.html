@@ -392,12 +392,14 @@
         bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
-        // 4. Estructura de la Leyenda REORGANIZADA
+        // 4. Estructura de la Leyenda MODIFICADA
         var overlaysTree = [
             {
-                label: '🐾 **Iniciativas y Conservación**', 
+                // Título simplificado a "Iniciativas"
+                label: '🐾 **Iniciativas**', 
                 selectAllCheckbox: true, 
                 children: [
+                    // Se mantienen las imágenes de símbolo (temp5_2_...)
                     {label: 'Apoyo a Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
                     {label: 'Apoyo a Iniciativas Privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
                     {label: 'Educación y Difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
