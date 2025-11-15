@@ -1,4 +1,4 @@
-<!doctype html>
+<<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -54,11 +54,17 @@
             border: 1px solid rgba(0, 0, 0, 0.2); 
         }
 
-        /* Mantenemos el ícono de colapso con fondo sólido para que se vea claro */
+        /* Oculta el ícono de colapso si la leyenda está siempre abierta */
         .leaflet-bottom.leaflet-right .leaflet-control-layers-toggle {
-            background-color: #fff;
+            display: none !important;
         }
-
+        
+        /* Asegura que la caja de contenidos se vea incluso sin el toggle */
+        .leaflet-bottom.leaflet-right .leaflet-control-layers-expanded {
+             padding: 6px;
+             padding-top: 10px;
+        }
+        
         </style>
         <title></title>
     </head>
@@ -145,7 +151,7 @@
                      video.style.maxWidth = "60vw";
                      imgTd.parentNode.replaceChild(video, imgTd);
                      popup._contentNode.classList.add('media');
-                     // Aggiorna il popup quando il video carica i metadati
+                     // Aggiorna el popup cuando el video carga los metadatos
                      video.addEventListener('loadedmetadata', function() {
                          popup.update();
                      });
@@ -437,7 +443,7 @@
         // DOBLE LEYENDA SEPARADA con POSICIONES INTERCAMBIADAS
         // =========================================================================
 
-        // 4a. Estructura de la Leyenda de Iniciativas (posición: inferior derecha)
+        // 4a. Estructura de la Leyenda de Iniciativas 
         var overlaysTree_iniciativas = [
             {
                 label: '🐾 **Iniciativas**', 
@@ -453,7 +459,7 @@
             }
         ];
         
-        // 4b. Estructura de la Leyenda de Mapas Base (posición: superior derecha)
+        // 4b. Estructura de la Leyenda de Mapas Base 
         var overlaysTree_mapasbase = [
             {
                 label: '🌍 **Mapas Base**', 
@@ -466,15 +472,15 @@
 
         // 5a. Control de Leyenda para Mapas Base (POSICIÓN ARRIBA)
         var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, {
-            collapsed: true,
+            collapsed: true, // Se mantiene colapsable
             position: 'topright' 
         });
         layMapasBase.addTo(map);
         
-        // 5b. Control de Leyenda para Iniciativas (POSICIÓN ABAJO)
+        // 5b. Control de Leyenda para Iniciativas (POSICIÓN ABAJO Y FIJA/EXPANDIDA)
         var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
-            collapsed: true,
-            position: 'bottomright' // Esto hace que el contenedor padre sea 'leaflet-bottom leaflet-right'
+            collapsed: false, // <<-- CAMBIO CLAVE: Fija la leyenda en estado expandido
+            position: 'bottomright'
         });
         layIniciativas.addTo(map);
         
