@@ -185,7 +185,7 @@
         }
         
         // =========================================================================
-        // SECCIÓN MODIFICADA: Capas Individuales y Estilos Filtrados
+        // SECCIÓN DE ESTILOS Y FILTROS PARA CAPAS INDIVIDUALES (SIN CAMBIOS AQUÍ)
         // =========================================================================
 
         // 1. Funciones de Estilo Individual
@@ -395,14 +395,16 @@
         bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
-        // 4. Estructura de la Leyenda Organizada (CORREGIDA)
+        // =========================================================================
+        // SECCIÓN CORREGIDA: Estructura de la Leyenda
+        // =========================================================================
 
         var overlaysTree = [
             {
                 label: '📍 **Iniciativas por Categoría**', 
                 selectAllCheckbox: true, 
                 children: [
-                    // Se reinsertaron las etiquetas <img> con los nombres de archivo correctos
+                    // Se usan los nombres de archivo de leyenda sin caracteres especiales (tildes)
                     {label: 'Apoyo Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
                     {label: 'Apoyo iniciativas privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
                     {label: 'Iniciativas de Educación y difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
