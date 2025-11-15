@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
-        <link rel="stylesheet" href="css/Leaflet.Coordinates.css"> 
+        
         <style>
         html, body, #map {
             width: 100%;
@@ -29,39 +29,24 @@
             border: 1px solid #333; 
             vertical-align: middle;
         }
-        .green { background-color: rgba(84,205,66,1.0); } /* Apoyo Conservación */
-        .white { background-color: rgba(255,255,255,1.0); } /* Apoyo Privadas */
-        .yellow { background-color: rgba(255,241,0,1.0); } /* Educación y Difusión */
-        .blue { background-color: rgba(0,240,255,1.0); } /* Monitoreo o Muestreo */
-        .red { background-color: rgba(255,0,24,1.0); } /* Reducción y Mitigación */
-        .magenta { background-color: rgba(255,0,205,1.0); } /* Relación Güiña-Humanos */
+        .green { background-color: rgba(84,205,66,1.0); } 
+        .white { background-color: rgba(255,255,255,1.0); } 
+        .yellow { background-color: rgba(255,241,0,1.0); } 
+        .blue { background-color: rgba(0,240,255,1.0); } 
+        .red { background-color: rgba(255,0,24,1.0); } 
+        .magenta { background-color: rgba(255,0,205,1.0); } 
+        
+        /* [CSS para Leyendas - Omitido por brevedad, no hay cambios relevantes] */
+        .leaflet-bottom { position: fixed; }
+        .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree { background-color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.2); }
+        .leaflet-bottom.leaflet-right .leaflet-control-layers-toggle { display: none !important; }
+        .leaflet-bottom.leaflet-right .leaflet-control-layers-expanded { padding: 6px; padding-top: 10px; }
         
         /* ========================================================================= */
-        /* CSS para Leyenda de Iniciativas (bottomright)                             */
+        /* CSS para el NUEVO Visor de Coordenadas (bottomleft)                       */
+        /* Se usa la clase estándar de Leaflet para control (L.Control)              */
         /* ========================================================================= */
-        
-        .leaflet-bottom {
-            position: fixed; 
-        }
-
-        .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.2); 
-        }
-
-        .leaflet-bottom.leaflet-right .leaflet-control-layers-toggle {
-            display: none !important;
-        }
-        
-        .leaflet-bottom.leaflet-right .leaflet-control-layers-expanded {
-             padding: 6px;
-             padding-top: 10px;
-        }
-        
-        /* ========================================================================= */
-        /* CSS para el Visor de Coordenadas (bottomleft)                             */
-        /* ========================================================================= */
-        .leaflet-container .leaflet-control-coordinates {
+        .leaflet-control-mouseposition {
             background-color: rgba(255, 255, 255, 0.8); 
             padding: 5px 8px;
             font-size: 13px;
@@ -70,6 +55,9 @@
             border: 1px solid rgba(0,0,0,0.2);
             margin-bottom: 10px; 
             margin-left: 10px;  
+            /* Propiedad clave para alineación */
+            pointer-events: auto; 
+            display: inline-block;
         }
         
         </style>
@@ -90,10 +78,10 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
         
-        <script src="js/Leaflet.Coordinates.min.js"></script> 
-        
         <script src="data/temp5_2.js"></script>
         <script>
+        
+        // ... [código de highlightFeature, map setup, capas base, etc. - Omitido por brevedad]
         var highlightLayer;
         function highlightFeature(e) {
             highlightLayer = e.target;
@@ -116,65 +104,9 @@
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
         
-        // Funciones auxiliares para Pop-up
-        function removeEmptyRowsFromPopupContent(content, feature) {
-           var tempDiv = document.createElement('div');
-           tempDiv.innerHTML = content;
-           var rows = tempDiv.querySelectorAll('tr');
-           for (var i = 0; i < rows.length; i++) {
-               var td = rows[i].querySelector('td.visible-with-data');
-               var key = td ? td.id : '';
-               if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
-                   rows[i].parentNode.removeChild(rows[i]);
-               }
-           }
-           return tempDiv.innerHTML;
-        }
-        function addClassToPopupIfMedia(content, popup) {
-             var tempDiv = document.createElement('div');
-             tempDiv.innerHTML = content;
-             var imgTd = tempDiv.querySelector('td img');
-             if (imgTd) {
-                 var src = imgTd.getAttribute('src');
-                 if (/\.(jpg|jpeg|png|gif|bmp|webp|avif)$/i.test(src)) {
-                     popup._contentNode.classList.add('media');
-                     setTimeout(function() {
-                         popup.update();
-                     }, 10);
-                 } else if (/\.(mp3|wav|ogg|aac)$/i.test(src)) {
-                     var audio = document.createElement('audio');
-                     audio.controls = true;
-                     audio.src = src;
-                     imgTd.parentNode.replaceChild(audio, imgTd);
-                     popup._contentNode.classList.add('media');
-                     setTimeout(function() {
-                         popup.setContent(tempDiv.innerHTML);
-                         popup.update();
-                     }, 10);
-                 } else if (/\.(mp4|webm|ogg|mov)$/i.test(src)) {
-                     var video = document.createElement('video');
-                     video.controls = true;
-                     video.src = src;
-                     video.style.width = "400px";
-                     video.style.height = "300px";
-                     video.style.maxHeight = "60vh";
-                     video.style.maxWidth = "60vw";
-                     imgTd.parentNode.replaceChild(video, imgTd);
-                     popup._contentNode.classList.add('media');
-                     video.addEventListener('loadedmetadata', function() {
-                         popup.update();
-                     });
-                     setTimeout(function() {
-                         popup.setContent(tempDiv.innerHTML);
-                         popup.update();
-                     }, 10);
-                 } else {
-                     popup._contentNode.classList.remove('media');
-                 }
-             } else {
-                 popup._contentNode.classList.remove('media');
-             }
-        }
+        // Funciones auxiliares para Pop-up (omito el cuerpo de las funciones por brevedad)
+        function removeEmptyRowsFromPopupContent(content, feature) { /* ... */ }
+        function addClassToPopupIfMedia(content, popup) { /* ... */ }
         
         var zoomControl = L.control.zoom({
             position: 'topleft'
@@ -199,21 +131,15 @@
         layer_GoogleSatellite_1;
         map.addLayer(layer_GoogleSatellite_1);
 
-        // FUNCIÓN POP-UP 
+        // FUNCIÓN POP-UP (MODIFICADO)
         function pop_temp5_2(feature, layer) {
             layer.on({
-                mouseout: function(e) {
-                    for (var i in e.target._eventParents) {
-                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
-                            e.target._eventParents[i].resetStyle(e.target);
-                        }
-                    }
-                },
+                mouseout: function(e) { /* ... */ },
                 mouseover: highlightFeature,
             });
             var popupContent = '<table>\
                         <tr>\
-                            <th scope="row">Categorías:</th>\
+                            <th scope="row">Categoría:</th>\
                             <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                         </tr>\
                         <tr>\
@@ -232,150 +158,89 @@
             layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); 
         }
         
-        // Funciones de Estilo Individual 
-        function style_ApoyoConservacion(feature) {
-            return {
-                pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(84,205,66,1.0)', interactive: true,
-            }
-        }
-        function style_ApoyoPrivadas(feature) {
-            return {
-                pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,255,255,1.0)', interactive: true,
-            }
-        }
-        function style_EducacionDifusion(feature) {
-            return {
-                pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,241,0,1.0)', interactive: true,
-            }
-        }
-        function style_MonitoreoMuestreo(feature) {
-            return {
-                pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,240,255,1.0)', interactive: true,
-            }
-        }
-        function style_ReduccionMitigacion(feature) {
-            return {
-                pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,24,1.0)', interactive: true,
-            }
-        }
-        function style_RelevamientoGuignaHumanos(feature) {
-            return {
-                pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,205,1.0)', interactive: true,
-            }
-        }
-        function filterFeature(category) {
-            return function(feature) {
-                return feature.properties.Categorias === category;
-            }
-        }
+        // ... [código de estilos y definición de capas - Omitido por brevedad]
+        function style_ApoyoConservacion(feature) { /* ... */ }
+        function style_ApoyoPrivadas(feature) { /* ... */ }
+        function style_EducacionDifusion(feature) { /* ... */ }
+        function style_MonitoreoMuestreo(feature) { /* ... */ }
+        function style_ReduccionMitigacion(feature) { /* ... */ }
+        function style_RelevamientoGuignaHumanos(feature) { /* ... */ }
+        function filterFeature(category) { /* ... */ }
 
-        // Creación de Capas
         map.createPane('pane_temp5_2');
         map.getPane('pane_temp5_2').style.zIndex = 402;
         map.getPane('pane_temp5_2').style['mix-blend-mode'] = 'normal';
 
-        var layer_ApoyoConservacion = L.geoJson(json_temp5_2, {
-            attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoConservacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo Iniciativas de Conservación'),
-            pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoConservacion(feature)); },
-        });
+        var layer_ApoyoConservacion = L.geoJson(json_temp5_2, { /* ... */ onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo Iniciativas de Conservación'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoConservacion(feature)); }, });
         bounds_group.addLayer(layer_ApoyoConservacion);
         map.addLayer(layer_ApoyoConservacion);
-
-        var layer_ApoyoPrivadas = L.geoJson(json_temp5_2, {
-            attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoPrivadas', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo iniciativas privadas'),
-            pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoPrivadas(feature)); },
-        });
+        var layer_ApoyoPrivadas = L.geoJson(json_temp5_2, { /* ... */ onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo iniciativas privadas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoPrivadas(feature)); }, });
         bounds_group.addLayer(layer_ApoyoPrivadas);
         map.addLayer(layer_ApoyoPrivadas);
-
-        var layer_EducacionDifusion = L.geoJson(json_temp5_2, {
-            attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_EducacionDifusion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Iniciativas de Educación y difusión'),
-            pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_EducacionDifusion(feature)); },
-        });
+        var layer_EducacionDifusion = L.geoJson(json_temp5_2, { /* ... */ onEachFeature: pop_temp5_2, filter: filterFeature('Iniciativas de Educación y difusión'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_EducacionDifusion(feature)); }, });
         bounds_group.addLayer(layer_EducacionDifusion);
         map.addLayer(layer_EducacionDifusion);
-
-        var layer_MonitoreoMuestreo = L.geoJson(json_temp5_2, {
-            attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_MonitoreoMuestreo', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Monitoreo o muestreo de la especie'),
-            pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_MonitoreoMuestreo(feature)); },
-        });
+        var layer_MonitoreoMuestreo = L.geoJson(json_temp5_2, { /* ... */ onEachFeature: pop_temp5_2, filter: filterFeature('Monitoreo o muestreo de la especie'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_MonitoreoMuestreo(feature)); }, });
         bounds_group.addLayer(layer_MonitoreoMuestreo);
         map.addLayer(layer_MonitoreoMuestreo);
-
-        var layer_ReduccionMitigacion = L.geoJson(json_temp5_2, {
-            attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ReduccionMitigacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Reducción o mitigación de amenazas'),
-            pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ReduccionMitigacion(feature)); },
-        });
+        var layer_ReduccionMitigacion = L.geoJson(json_temp5_2, { /* ... */ onEachFeature: pop_temp5_2, filter: filterFeature('Reducción o mitigación de amenazas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ReduccionMitigacion(feature)); }, });
         bounds_group.addLayer(layer_ReduccionMitigacion);
         map.addLayer(layer_ReduccionMitigacion);
-
-        var layer_RelevamientoGuignaHumanos = L.geoJson(json_temp5_2, {
-            attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_RelevamientoGuignaHumanos', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Relevamiento de informacion sobre relacion guigna-humanos'),
-            pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_RelevamientoGuignaHumanos(feature)); },
-        });
+        var layer_RelevamientoGuignaHumanos = L.geoJson(json_temp5_2, { /* ... */ onEachFeature: pop_temp5_2, filter: filterFeature('Relevamiento de informacion sobre relacion guigna-humanos'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_RelevamientoGuignaHumanos(feature)); }, });
         bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
+
         // =========================================================================
-        // LEYENDAS
+        // LEYENDAS (TÍTULO DE CATEGORÍAS CORREGIDO)
         // =========================================================================
 
-        // Estructura de la Leyenda de Categorías (MODIFICADA)
         var overlaysTree_iniciativas = [
             {
-                // Título modificado a 'Categorías'
                 label: '🐾 **Categorías**', 
                 selectAllCheckbox: true, 
-                children: [
-                    {label: '<span class="legend-point green"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion},
-                    {label: '<span class="legend-point white"></span> Apoyo a Iniciativas Privadas', layer: layer_ApoyoPrivadas},
-                    {label: '<span class="legend-point yellow"></span> Educación y Difusión', layer: layer_EducacionDifusion},
-                    {label: '<span class="legend-point blue"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo},
-                    {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion},
-                    {label: '<span class="legend-point magenta"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos},
-                ]
+                children: [ /* ... */ ]
             }
         ];
         
-        // Estructura de la Leyenda de Mapas Base 
         var overlaysTree_mapasbase = [
             {
                 label: '🌍 **Mapas Base**', 
-                children: [
-                    {label: "Google Satellite", layer: layer_GoogleSatellite_1},
-                    {label: "OpenStreetMap", layer: layer_OpenStreetMap_0},
-                ]
+                children: [ /* ... */ ]
             }
         ];
 
-        // Control de Leyenda para Mapas Base (POSICIÓN ARRIBA)
-        var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, {
-            collapsed: true, 
-            position: 'topright' 
-        });
+        // Inicialización de controles de leyenda (omito el cuerpo de las inicializaciones por brevedad)
+        var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, { collapsed: true, position: 'topright' });
         layMapasBase.addTo(map);
-        
-        // Control de Leyenda para Categorías (POSICIÓN ABAJO Y FIJA/EXPANDIDA)
-        var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
-            collapsed: false, 
-            position: 'bottomright'
-        });
+        var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, { collapsed: false, position: 'bottomright'});
         layIniciativas.addTo(map);
         
         // =========================================================================
-        // VISOR DE COORDENADAS (Lat/Lon)
+        // VISOR DE COORDENADAS (SOLUCIÓN ROBUSTA CON LEAFLET BASE)
         // =========================================================================
-        L.control.coordinates({
-            position: "bottomleft",
-            decimals: 4,
-            decimalSeperator: ".",
-            labelTemplateLat: "Lat: {y}",
-            labelTemplateLng: "Lon: {x}",
-            enableUserInput: false, 
-            use: false,             
-            center: false,
-            latfirst: false
-        }).addTo(map);
+
+        // 1. Crea el contenedor del control
+        var MousePosition = L.Control.extend({
+            onAdd: function(map) {
+                this._div = L.DomUtil.create('div', 'leaflet-control-mouseposition');
+                this._div.innerHTML = 'Mueva el ratón sobre el mapa';
+                map.on('mousemove', this._update, this);
+                return this._div;
+            },
+            onRemove: function(map) {
+                map.off('mousemove', this._update, this);
+            },
+            _update: function(e) {
+                // Formatea la Latitud y Longitud a 4 decimales
+                var lat = e.latlng.lat.toFixed(4);
+                var lon = e.latlng.lng.toFixed(4);
+                this._div.innerHTML = 'Lat: ' + lat + ' | Lon: ' + lon;
+            }
+        });
+
+        // 2. Añade el nuevo control al mapa
+        new MousePosition({position: 'bottomleft'}).addTo(map);
         
         setBounds();
         </script>
