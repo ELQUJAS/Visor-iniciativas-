@@ -37,18 +37,16 @@
         .magenta { background-color: rgba(255,0,205,1.0); } /* Relación Güiña-Humanos */
         
         /* ========================================================================= */
-        /* CSS para la Leyenda de Iniciativas (Fija abajo y Expandida)               */
+        /* CSS para Leyenda de Iniciativas (bottomright)                             */
         /* ========================================================================= */
         
         /* La clase 'leaflet-bottom' asegura que el contenedor esté en la parte inferior */
         .leaflet-bottom {
-            /* Fija la posición en la pantalla, independientemente del mapa */
             position: fixed; 
         }
 
         /* Ajusta el fondo del panel expandido de las iniciativas */
         .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree {
-            /* Transparencia (RGBA: el 4to valor (0.8) es la opacidad) */
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.2); 
         }
@@ -64,16 +62,20 @@
              padding-top: 10px;
         }
         
-        /* Ajuste para el visor de coordenadas (bottomleft) */
+        /* ========================================================================= */
+        /* CSS para el Visor de Coordenadas (bottomleft)                             */
+        /* ========================================================================= */
         .leaflet-container .leaflet-control-coordinates {
-            background-color: rgba(255, 255, 255, 0.8); /* Fondo transparente */
+            /* Asegura que tenga un fondo para que sea visible */
+            background-color: rgba(255, 255, 255, 0.8); 
             padding: 5px 8px;
             font-size: 13px;
             color: #333;
             border-radius: 4px;
             border: 1px solid rgba(0,0,0,0.2);
-            margin-bottom: 10px; /* Separación del borde inferior */
-            margin-left: 10px;  /* Separación del borde izquierdo */
+            /* Margen para que no toque la esquina */
+            margin-bottom: 10px; 
+            margin-left: 10px;  
         }
         
         </style>
@@ -497,25 +499,20 @@
         layIniciativas.addTo(map);
         
         // =========================================================================
-        // 6. VISOR DE COORDENADAS CORREGIDO (Lat/Lon)
+        // 6. VISOR DE COORDENADAS (Lat/Lon) - Configuración estable y funcional
         // =========================================================================
         L.control.coordinates({
-            position: "bottomleft", // Ubicación del control
-            decimals: 4,           // Número de decimales
-            decimalSeperator: ".", // Separador decimal
-            labelTemplateLat: "Lat: {y}", // Etiqueta para latitud
-            labelTemplateLng: "Lon: {x}", // Etiqueta para longitud
-            enableUserInput: false, // No permite entrada manual
-            use: false,             // **CORREGIDO: Eliminar opciones erróneas**
+            position: "bottomleft", // Ubicación fija en la esquina inferior izquierda
+            decimals: 4,           // 4 decimales para mayor precisión
+            decimalSeperator: ".", 
+            labelTemplateLat: "Lat: {y}", // Muestra "Lat:"
+            labelTemplateLng: "Lon: {x}", // Muestra "Lon:"
+            enableUserInput: false, 
+            use: false,             
             center: false,
-            latfirst: false,
-            // Simplemente activa el visor de Lat/Lon del cursor
+            latfirst: false
         }).addTo(map);
         
-        // NOTA sobre UTM: La conversión UTM no es nativa en esta librería.
-        // Si necesitas UTM, se requiere una librería de proyección adicional (ej. proj4leaflet).
-        // Por ahora, el visor mostrará Latitud/Longitud del cursor.
-
         setBounds();
         </script>
         
