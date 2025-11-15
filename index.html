@@ -162,7 +162,7 @@
         map.addLayer(layer_GoogleSatellite_1);
 
         // =========================================================================
-        // FUNCIÓN POP-UP (CON SEIS CONDICIONES DE DESCRIPCIÓN PERSONALIZADAS)
+        // FUNCIÓN POP-UP (CON OCHO CONDICIONES DE DESCRIPCIÓN PERSONALIZADAS)
         // =========================================================================
         function pop_temp5_2(feature, layer) {
             layer.on({
@@ -194,11 +194,19 @@
             else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Jose Caro') {
                 descripcionTexto = 'a. Parque Nacional Radal Siete Tazas<br>b. Bosque esclerófilo (de montaña) y Bosque caducifolio<br>c. Parámetros de ocupación ("Naïve", sin corrección por tasa de detección u otras variables) Fecha: 2019-2023. Implementación del monitoreo con cámaras trampas en el Parque Nacional y el análisis de los resultados de ocupación simple, desde el año 2019 al 2023. Después siguieron con el monitoreo los colegas Guardaparques del parque nacional.';
             }
-            // 6. CONDICIÓN: Monitoreo o muestreo de la especie (Nicolas Galvez - Papers)
+            // 6. CONDICIÓN: Monitoreo o muestreo de la especie (Nicolas Galvez - Papers Agrícolas)
             else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Nicolas Galvez') {
                 descripcionTexto = 'a. áreas agrícolas<br>b. paisajes agrícolas<br>c. otro. parámetros de ocupación<br><br>**PAPERS ASOCIADOS**:<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.13072</a><br><a href="https://doi.org/10.1111/1365-2664.14026" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab07" target="_blank">https://doi.org/10.1093/jmammal/gyab07</a>';
             }
-            // 7. VALOR POR DEFECTO: Usa el valor del atributo original
+            // 7. CONDICIÓN: Relevamiento de informacion sobre relacion guigna-humanos (Nicolas Galvez - Encuestas)
+            else if (categoria === 'Relevamiento de informacion sobre relacion guigna-humanos' && academicos === 'Nicolas Galvez') {
+                descripcionTexto = 'Encuestas sobre eliminación de depredadores.<br><br>Información en el paper: <a href="https://doi.org/10.3389/fecol.2021.712044" target="_blank">doi.org/10.3389/fecol.2021.712044</a>';
+            }
+            // 8. CONDICIÓN Y DESCRIPCIÓN FINAL: Apoyo Iniciativas de Conservación (Nicolas Galvez - Fundación)
+            else if (categoria === 'Apoyo Iniciativas de Conservación' && academicos === 'Nicolas Galvez') {
+                descripcionTexto = 'a. Fundación para la Conservación Ambiental y Zoológica<br>Apoyo a las iniciativas de conservación de un fragmento continuo de 300-400 hectáreas. Monitoreo con Cámaras trampa desde el 2016. Registros en Wildlife Insights.<br>Apoyo al monitoreo y protocolos de manejo para la conservación.';
+            }
+            // 9. VALOR POR DEFECTO: Usa el valor del atributo original
             else {
                 descripcionTexto = feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '';
             }
