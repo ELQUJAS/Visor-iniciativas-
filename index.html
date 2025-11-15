@@ -185,7 +185,7 @@
         }
         
         // =========================================================================
-        // INICIO DE LA SECCIÓN MODIFICADA: Capas Individuales y Estilos Filtrados
+        // SECCIÓN MODIFICADA: Capas Individuales y Estilos Filtrados
         // =========================================================================
 
         // 1. Funciones de Estilo Individual
@@ -395,19 +395,20 @@
         bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
-        // 4. Estructura de la Leyenda Organizada
+        // 4. Estructura de la Leyenda Organizada (CORREGIDA)
 
         var overlaysTree = [
             {
                 label: '📍 **Iniciativas por Categoría**', 
                 selectAllCheckbox: true, 
                 children: [
-                    {label: 'Apoyo Iniciativas de Conservación <img src="legend/ApoyoIniciativasdeConservación.png" />', layer: layer_ApoyoConservacion},
-                    {label: 'Apoyo iniciativas privadas <img src="legend/Apoyoiniciativasprivadas.png" />', layer: layer_ApoyoPrivadas},
-                    {label: 'Iniciativas de Educación y difusión <img src="legend/IniciativasdeEducaciónydifusión.png" />', layer: layer_EducacionDifusion},
-                    {label: 'Monitoreo o muestreo de la especie <img src="legend/Monitoreoomuestreodelaespecie.png" />', layer: layer_MonitoreoMuestreo},
-                    {label: 'Reducción o mitigación de amenazas <img src="legend/Reducciónomitigacióndeamenazas.png" />', layer: layer_ReduccionMitigacion},
-                    {label: 'Relevamiento de información sobre relación güiña-humanos <img src="legend/Relevamientodeinformacionsobrerelacionguignahumanos.png" />', layer: layer_RelevamientoGuignaHumanos},
+                    // Se reinsertaron las etiquetas <img> con los nombres de archivo correctos
+                    {label: 'Apoyo Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
+                    {label: 'Apoyo iniciativas privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
+                    {label: 'Iniciativas de Educación y difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
+                    {label: 'Monitoreo o muestreo de la especie <img src="legend/temp5_2_Monitoreoomuestreodelaespecie3.png" />', layer: layer_MonitoreoMuestreo},
+                    {label: 'Reducción o mitigación de amenazas <img src="legend/temp5_2_Reduccinomitigacindeamenazas4.png" />', layer: layer_ReduccionMitigacion},
+                    {label: 'Relevamiento de información sobre relación güiña-humanos <img src="legend/temp5_2_Relevamientodeinformacionsobrerelacionguignahumanos5.png" />', layer: layer_RelevamientoGuignaHumanos},
                 ]
             },
             {
@@ -423,9 +424,7 @@
             collapsed: true,
         });
         lay.addTo(map);
-
-        // =========================================================================
-        // FIN DE LA SECCIÓN MODIFICADA
+        
         // =========================================================================
         
         setBounds();
