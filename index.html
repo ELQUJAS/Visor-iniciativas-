@@ -78,7 +78,7 @@
         <script src="data/temp5_2.js"></script>
         
         <script>
-            // Solución de visualización: Inicialización de Leaflet dentro de window.onload
+            // SOLUCIÓN DE VISUALIZACIÓN: Inicialización de Leaflet dentro de window.onload
             window.onload = function() {
 
                 // [Funciones de Highlight y Map Setup]
@@ -168,7 +168,7 @@
                 map.addLayer(layer_GoogleSatellite_1);
 
                 // =========================================================================
-                // FUNCIÓN POP-UP (CON LÓGICA DE EDICIÓN INDIVIDUAL POR ID)
+                // FUNCIÓN POP-UP (USANDO EL ID TEMPORAL __temp_id)
                 // =========================================================================
                 function pop_temp5_2(feature, layer) {
                     layer.on({
@@ -179,14 +179,15 @@
                     var descripcionTexto;
                     var categoria = feature.properties['Categorias'];
                     var academicos = feature.properties['Academicos'];
-                    var puntoID = feature.properties['ID_PUNTO']; // Asumiendo que 'ID_PUNTO' existe en tus datos
+                    // 🔑 LECTURA DEL ID TEMPORAL INYECTADO
+                    var puntoID = feature.properties['__temp_id']; 
 
                     // 🅰️ LÓGICA DE EDICIÓN INDIVIDUAL (PRIORIDAD AL ID)
-                    if (puntoID === 15) { 
-                        descripcionTexto = 'ESTA ES LA DESCRIPCIÓN INDIVIDUAL ÚNICA PARA EL PUNTO CON ID 15. Sobrescribe cualquier otra regla.';
+                    if (puntoID === 5) { 
+                        descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
                     } 
-                    else if (puntoID === 22) {
-                        descripcionTexto = 'Descripción especial para el punto 22: ¡Proyecto de reforestación clave!';
+                    else if (puntoID === 12) {
+                        descripcionTexto = 'Descripción personalizada para el punto 12.';
                     } 
                     // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS EXISTENTES)
                     // 1. CONDICIÓN: Monitoreo o muestreo de la especie (Diego Ramirez)
@@ -217,7 +218,7 @@
                     var popupContent = '<table>\
                                         <tr>\
                                             <th scope="row">ID del Punto:</th>\
-                                            <td>' + (feature.properties['ID_PUNTO'] !== null ? autolinker.link(String(feature.properties['ID_PUNTO']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
+                                            <td>' + (feature.properties['__temp_id'] !== null ? autolinker.link(String(feature.properties['__temp_id']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
                                         </tr>\
                                         <tr>\
                                             <th scope="row">Categoría:</th>\
@@ -245,27 +246,45 @@
                 function style_MonitoreoMuestreo(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,240,255,1.0)', interactive: true, } }
                 function style_ReduccionMitigacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,24,1.0)', interactive: true, } }
                 function style_RelevamientoGuignaHumanos(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,205,1.0)', interactive: true, } }
-                function filterFeature(category) { return function(feature) { return feature.properties.Categorias === category; } }
+                
+                // =========================================================================
+                // INYECTAR ID ÚNICO Y CREACIÓN DE CAPAS
+                // =========================================================================
+
+                // Este bloque asigna un ID secuencial a cada punto (1, 2, 3, etc.)
+                for (i = 0; i < json_temp5_2.features.length; i++) {
+                    json_temp5_2.features[i].properties['__temp_id'] = i + 1; 
+                }
+
+                function filterFeature(category) { 
+                    return function(feature) { return feature.properties.Categorias === category; } 
+                }
 
                 map.createPane('pane_temp5_2');
                 map.getPane('pane_temp5_2').style.zIndex = 402;
                 map.getPane('pane_temp5_2').style['mix-blend-mode'] = 'normal';
 
+                // Creación de capas usando los filtros y el GeoJSON modificado
                 var layer_ApoyoConservacion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoConservacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo Iniciativas de Conservación'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoConservacion(feature)); }, });
                 bounds_group.addLayer(layer_ApoyoConservacion);
                 map.addLayer(layer_ApoyoConservacion);
+
                 var layer_ApoyoPrivadas = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoPrivadas', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo iniciativas privadas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoPrivadas(feature)); }, });
                 bounds_group.addLayer(layer_ApoyoPrivadas);
                 map.addLayer(layer_ApoyoPrivadas);
+
                 var layer_EducacionDifusion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_EducacionDifusion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Iniciativas de Educación y difusión'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_EducacionDifusion(feature)); }, });
                 bounds_group.addLayer(layer_EducacionDifusion);
                 map.addLayer(layer_EducacionDifusion);
+
                 var layer_MonitoreoMuestreo = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_MonitoreoMuestreo', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Monitoreo o muestreo de la especie'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_MonitoreoMuestreo(feature)); }, });
                 bounds_group.addLayer(layer_MonitoreoMuestreo);
                 map.addLayer(layer_MonitoreoMuestreo);
+
                 var layer_ReduccionMitigacion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ReduccionMitigacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Reducción o mitigación de amenazas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ReduccionMitigacion(feature)); }, });
                 bounds_group.addLayer(layer_ReduccionMitigacion);
                 map.addLayer(layer_ReduccionMitigacion);
+
                 var layer_RelevamientoGuignaHumanos = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_RelevamientoGuignaHumanos', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Relevamiento de informacion sobre relacion guigna-humanos'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_RelevamientoGuignaHumanos(feature)); }, });
                 bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
                 map.addLayer(layer_RelevamientoGuignaHumanos);
