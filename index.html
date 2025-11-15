@@ -152,7 +152,7 @@
         layer_GoogleSatellite_1;
         map.addLayer(layer_GoogleSatellite_1);
 
-        // FUNCIÓN POP-UP MODIFICADA
+        // FUNCIÓN POP-UP (SIN CAMBIOS)
         function pop_temp5_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -185,7 +185,7 @@
             layer.bindPopup(content, { maxHeight: 400 });
         }
         
-        // 1. Funciones de Estilo Individual
+        // 1. Funciones de Estilo Individual (SIN CAMBIOS)
         function style_ApoyoConservacion(feature) {
             return {
                 pane: 'pane_temp5_2',
@@ -295,7 +295,7 @@
             }
         }
 
-        // 3. Creación de Capas Individuales
+        // 3. Creación de Capas Individuales (SIN CAMBIOS)
 
         map.createPane('pane_temp5_2');
         map.getPane('pane_temp5_2').style.zIndex = 402;
@@ -392,14 +392,16 @@
         bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
-        // 4. Estructura de la Leyenda MODIFICADA
-        var overlaysTree = [
+        // =========================================================================
+        // DOBLE LEYENDA SEPARADA
+        // =========================================================================
+
+        // 4a. Estructura de la Leyenda de Iniciativas
+        var overlaysTree_iniciativas = [
             {
-                // Título simplificado a "Iniciativas"
                 label: '🐾 **Iniciativas**', 
                 selectAllCheckbox: true, 
                 children: [
-                    // Se mantienen las imágenes de símbolo (temp5_2_...)
                     {label: 'Apoyo a Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
                     {label: 'Apoyo a Iniciativas Privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
                     {label: 'Educación y Difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
@@ -407,20 +409,35 @@
                     {label: 'Reducción y Mitigación de Amenazas <img src="legend/temp5_2_Reduccinomitigacindeamenazas4.png" />', layer: layer_ReduccionMitigacion},
                     {label: 'Relación Güiña-Humanos (Relevamiento) <img src="legend/temp5_2_Relevamientodeinformacionsobrerelacionguignahumanos5.png" />', layer: layer_RelevamientoGuignaHumanos},
                 ]
-            },
+            }
+        ];
+        
+        // 4b. Estructura de la Leyenda de Mapas Base
+        var overlaysTree_mapasbase = [
             {
                 label: '🌍 **Mapas Base**', 
                 children: [
                     {label: "Google Satellite", layer: layer_GoogleSatellite_1},
                     {label: "OpenStreetMap", layer: layer_OpenStreetMap_0},
                 ]
-            },
-        ]
+            }
+        ];
 
-        var lay = L.control.layers.tree(null, overlaysTree,{
+        // 5a. Control de Leyenda para Iniciativas (posición superior derecha)
+        var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
             collapsed: true,
+            position: 'topright' // Puedes ajustar la posición
         });
-        lay.addTo(map);
+        layIniciativas.addTo(map);
+
+        // 5b. Control de Leyenda para Mapas Base (posición inferior derecha)
+        var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, {
+            collapsed: true,
+            position: 'bottomright' // Puedes ajustar la posición
+        });
+        layMapasBase.addTo(map);
+        
+        // =========================================================================
         
         setBounds();
         </script>
