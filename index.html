@@ -78,7 +78,7 @@
         <script src="data/temp5_2.js"></script>
         
         <script>
-            // SOLUCIÓN: Usamos window.onload para asegurar que el DOM (y el #map con sus estilos) esté completamente cargado antes de inicializar Leaflet.
+            // Solución de visualización: Inicialización de Leaflet dentro de window.onload
             window.onload = function() {
 
                 // [Funciones de Highlight y Map Setup]
@@ -168,7 +168,7 @@
                 map.addLayer(layer_GoogleSatellite_1);
 
                 // =========================================================================
-                // FUNCIÓN POP-UP (CON CINCO CONDICIONES DE DESCRIPCIÓN ACTUALIZADAS)
+                // FUNCIÓN POP-UP (CON LÓGICA DE EDICIÓN INDIVIDUAL POR ID)
                 // =========================================================================
                 function pop_temp5_2(feature, layer) {
                     layer.on({
@@ -179,9 +179,18 @@
                     var descripcionTexto;
                     var categoria = feature.properties['Categorias'];
                     var academicos = feature.properties['Academicos'];
-                    
+                    var puntoID = feature.properties['ID_PUNTO']; // Asumiendo que 'ID_PUNTO' existe en tus datos
+
+                    // 🅰️ LÓGICA DE EDICIÓN INDIVIDUAL (PRIORIDAD AL ID)
+                    if (puntoID === 15) { 
+                        descripcionTexto = 'ESTA ES LA DESCRIPCIÓN INDIVIDUAL ÚNICA PARA EL PUNTO CON ID 15. Sobrescribe cualquier otra regla.';
+                    } 
+                    else if (puntoID === 22) {
+                        descripcionTexto = 'Descripción especial para el punto 22: ¡Proyecto de reforestación clave!';
+                    } 
+                    // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS EXISTENTES)
                     // 1. CONDICIÓN: Monitoreo o muestreo de la especie (Diego Ramirez)
-                    if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
+                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
                     } 
                     // 2. CONDICIÓN: Monitoreo o muestreo de la especie (Beltrami)
@@ -200,12 +209,16 @@
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Jose Caro') {
                         descripcionTexto = 'a. Parque Nacional Radal Siete Tazas<br>b. Bosque esclerófilo (de montaña) y Bosque caducifolio<br>c. Parámetros de ocupación ("Naïve", sin corrección por tasa de detección u otras variables) Fecha: 2019-2023. Implementación del monitoreo con cámaras trampas en el Parque Nacional y el análisis de los resultados de ocupación simple, desde el año 2019 al 2023. Después siguieron con el monitoreo los colegas Guardaparques del parque nacional.';
                     }
-                    // 6. VALOR POR DEFECTO: Usa el valor del atributo original
+                    // 6. VALOR POR DEFECTO
                     else {
                         descripcionTexto = feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '';
                     }
 
                     var popupContent = '<table>\
+                                        <tr>\
+                                            <th scope="row">ID del Punto:</th>\
+                                            <td>' + (feature.properties['ID_PUNTO'] !== null ? autolinker.link(String(feature.properties['ID_PUNTO']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
+                                        </tr>\
                                         <tr>\
                                             <th scope="row">Categoría:</th>\
                                             <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
@@ -292,7 +305,7 @@
                 layIniciativas.addTo(map);
                 
                 // =========================================================================
-                // VISOR DE COORDENADAS (SOLUCIÓN ROBUSTA NATIVA)
+                // VISOR DE COORDENADAS
                 // =========================================================================
 
                 var MousePosition = L.Control.extend({
