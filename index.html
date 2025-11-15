@@ -396,25 +396,24 @@
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
         // =========================================================================
-        // SECCIÓN CORREGIDA: Estructura de la Leyenda
+        // SECCIÓN MEJORADA ESTÉTICAMENTE Y REORGANIZADA
         // =========================================================================
 
         var overlaysTree = [
             {
-                label: '📍 **Iniciativas por Categoría**', 
+                label: '🐾 **Iniciativas y Conservación**', 
                 selectAllCheckbox: true, 
                 children: [
-                    // Se usan los nombres de archivo de leyenda sin caracteres especiales (tildes)
-                    {label: 'Apoyo Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
-                    {label: 'Apoyo iniciativas privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
-                    {label: 'Iniciativas de Educación y difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
-                    {label: 'Monitoreo o muestreo de la especie <img src="legend/temp5_2_Monitoreoomuestreodelaespecie3.png" />', layer: layer_MonitoreoMuestreo},
-                    {label: 'Reducción o mitigación de amenazas <img src="legend/temp5_2_Reduccinomitigacindeamenazas4.png" />', layer: layer_ReduccionMitigacion},
-                    {label: 'Relevamiento de información sobre relación güiña-humanos <img src="legend/temp5_2_Relevamientodeinformacionsobrerelacionguignahumanos5.png" />', layer: layer_RelevamientoGuignaHumanos},
+                    {label: 'Apoyo a Iniciativas de Conservación <img src="legend/temp5_2_ApoyoIniciativasdeConservacin0.png" />', layer: layer_ApoyoConservacion},
+                    {label: 'Apoyo a Iniciativas Privadas <img src="legend/temp5_2_Apoyoiniciativasprivadas1.png" />', layer: layer_ApoyoPrivadas},
+                    {label: 'Educación y Difusión <img src="legend/temp5_2_IniciativasdeEducacinydifusin2.png" />', layer: layer_EducacionDifusion},
+                    {label: 'Monitoreo o Muestreo de la Especie <img src="legend/temp5_2_Monitoreoomuestreodelaespecie3.png" />', layer: layer_MonitoreoMuestreo},
+                    {label: 'Reducción y Mitigación de Amenazas <img src="legend/temp5_2_Reduccinomitigacindeamenazas4.png" />', layer: layer_ReduccionMitigacion},
+                    {label: 'Relación Güiña-Humanos (Relevamiento) <img src="legend/temp5_2_Relevamientodeinformacionsobrerelacionguignahumanos5.png" />', layer: layer_RelevamientoGuignaHumanos},
                 ]
             },
             {
-                label: '🗺️ **Mapas Base**', 
+                label: '🌍 **Mapas Base**', 
                 children: [
                     {label: "Google Satellite", layer: layer_GoogleSatellite_1},
                     {label: "OpenStreetMap", layer: layer_OpenStreetMap_0},
