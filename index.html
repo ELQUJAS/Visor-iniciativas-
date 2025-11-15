@@ -1,4 +1,4 @@
-<<!doctype html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -199,7 +199,7 @@
         layer_GoogleSatellite_1;
         map.addLayer(layer_GoogleSatellite_1);
 
-        // FUNCIÓN POP-UP (SIN CAMBIOS)
+        // FUNCIÓN POP-UP (minWidth y maxWidth AÑADIDOS)
         function pop_temp5_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -229,14 +229,14 @@
             layer.on('popupopen', function(e) {
                 addClassToPopupIfMedia(content, e.popup);
             });
-            layer.bindPopup(content, { maxHeight: 400 });
+            layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); // <-- LÍNEA MODIFICADA
         }
         
-        // 1. Funciones de Estilo Individual (SIN CAMBIOS)
+        // 1. Funciones de Estilo Individual (RADIO AUMENTADO a 8.0)
         function style_ApoyoConservacion(feature) {
             return {
                 pane: 'pane_temp5_2',
-                radius: 5.200000000000001,
+                radius: 8.0, 
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -253,7 +253,7 @@
         function style_ApoyoPrivadas(feature) {
             return {
                 pane: 'pane_temp5_2',
-                radius: 5.200000000000001,
+                radius: 8.0, 
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -270,7 +270,7 @@
         function style_EducacionDifusion(feature) {
             return {
                 pane: 'pane_temp5_2',
-                radius: 5.200000000000001,
+                radius: 8.0, 
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -287,7 +287,7 @@
         function style_MonitoreoMuestreo(feature) {
             return {
                 pane: 'pane_temp5_2',
-                radius: 5.200000000000001,
+                radius: 8.0, 
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -304,7 +304,7 @@
         function style_ReduccionMitigacion(feature) {
             return {
                 pane: 'pane_temp5_2',
-                radius: 5.200000000000001,
+                radius: 8.0, 
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -321,7 +321,7 @@
         function style_RelevamientoGuignaHumanos(feature) {
             return {
                 pane: 'pane_temp5_2',
-                radius: 5.200000000000001,
+                radius: 8.0, 
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -335,7 +335,7 @@
             }
         }
 
-        // 2. Función de Filtrado
+        // 2. Función de Filtrado (SIN CAMBIOS)
         function filterFeature(category) {
             return function(feature) {
                 return feature.properties.Categorias === category;
@@ -440,7 +440,7 @@
         map.addLayer(layer_RelevamientoGuignaHumanos);
 
         // =========================================================================
-        // DOBLE LEYENDA SEPARADA con POSICIONES INTERCAMBIADAS
+        // LEYENDAS
         // =========================================================================
 
         // 4a. Estructura de la Leyenda de Iniciativas 
@@ -479,7 +479,7 @@
         
         // 5b. Control de Leyenda para Iniciativas (POSICIÓN ABAJO Y FIJA/EXPANDIDA)
         var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, {
-            collapsed: false, // <<-- CAMBIO CLAVE: Fija la leyenda en estado expandido
+            collapsed: false, // Fija la leyenda en estado expandido
             position: 'bottomright'
         });
         layIniciativas.addTo(map);
