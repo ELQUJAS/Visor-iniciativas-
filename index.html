@@ -162,7 +162,7 @@
         map.addLayer(layer_GoogleSatellite_1);
 
         // =========================================================================
-        // FUNCIÓN POP-UP (CON OCHO CONDICIONES DE DESCRIPCIÓN PERSONALIZADAS)
+        // FUNCIÓN POP-UP (CON OCHO CONDICIONES DE DESCRIPCIÓN PERSONALIZADAS + COORDENADAS)
         // =========================================================================
         function pop_temp5_2(feature, layer) {
             layer.on({
@@ -211,6 +211,24 @@
                 descripcionTexto = feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '';
             }
 
+            // =================================================================
+            // INICIO: CÓDIGO PARA OBTENER Y FORMATEAR COORDENADAS
+            // =================================================================
+            var coordsContent = '';
+            // Se asume que la geometría es de tipo Point para extraer coordenadas [lon, lat]
+            if (feature.geometry && feature.geometry.type === 'Point' && feature.geometry.coordinates.length >= 2) {
+                var lon = feature.geometry.coordinates[0].toFixed(4); // Longitud
+                var lat = feature.geometry.coordinates[1].toFixed(4); // Latitud
+                coordsContent = '<tr>\
+                                    <th scope="row">Coordenadas:</th>\
+                                    <td>Lat: ' + lat + ' | Lon: ' + lon + '</td>\
+                                </tr>';
+            }
+            // =================================================================
+            // FIN: CÓDIGO PARA OBTENER Y FORMATEAR COORDENADAS
+            // =================================================================
+
+
             var popupContent = '<table>\
                         <tr>\
                             <th scope="row">Categoría:</th>\
@@ -223,8 +241,8 @@
                         <tr>\
                             <th scope="row">Académicos:</th>\
                             <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                        </tr>\
-                    </table>';
+                        </tr>' + coordsContent + // Se inserta la fila de coordenadas aquí
+                    '</table>';
                     
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
             layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
