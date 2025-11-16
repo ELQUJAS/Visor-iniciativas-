@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="css/leaflet.photon.css">
         
         <style>
+        /* ESTILO CRUCIAL PARA QUE EL MAPA OCUPE TODA LA PANTALLA */
         html, body, #map {
             width: 100%;
             height: 100%;
@@ -168,7 +169,7 @@
                 map.addLayer(layer_GoogleSatellite_1);
 
                 // =========================================================================
-                // FUNCIÓN POP-UP (USANDO EL ID TEMPORAL __temp_id)
+                // FUNCIÓN POP-UP (APLICANDO LA MODIFICACIÓN DE ID 20)
                 // =========================================================================
                 function pop_temp5_2(feature, layer) {
                     layer.on({
@@ -186,11 +187,10 @@
                     if (puntoID === 5) { 
                         descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
                     } 
-                    // 🟢 MODIFICACIÓN SOLICITADA PARA EL PUNTO ID 20
+                    // MODIFICACIÓN APLICADA: ID 20 A BOSQUE NATIVO ESPINOSO
                     else if (puntoID === 20) {
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Bosque Nativo Espinoso)';
                     }
-                    // FIN DE LA MODIFICACIÓN
                     else if (puntoID === 12) {
                         descripcionTexto = 'a. Áreas agrícolas<br>b. Paisajes agrícolas<br>c. Parámetros de ocupación<br><br>**PAPERS ASOCIADOS:**<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.13072</a><br><a href="https://doi.org/10.1111/1365-2664.14026" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab074" target="_blank">https://doi.org/10.1093/jmammal/gyab074</a>';
                     } 
@@ -201,23 +201,20 @@
                         descripcionTexto = 'a. Fundación para la Conservación Ambiental y Zoológica<br><br>Apoyo a las iniciativas de conservación de un fragmento continuo de 300-400 hectáreas. Monitoreo con Cámaras trampa desde el 2016. Registros en Wildlife Insights.<br><br>Apoyo al monitoreo y y protocolos de manejo para la conservación.';
                     }
                     // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS EXISTENTES)
-                    // 1. CONDICIÓN: Monitoreo o muestreo de la especie (Diego Ramirez) - ESTA REGLA SOLO SE APLICA SI NO SE CUMPLE EL CASO ESPECÍFICO DE ID 20 ARRIBA.
+                    // Esta regla se mantiene como fallback para otros puntos de Diego Ramirez que no sean el ID 20.
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
                     } 
-                    // 2. CONDICIÓN: Monitoreo o muestreo de la especie (Beltrami)
+                    // ... (otras reglas por categoría/académico)
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Beltrami') {
                         descripcionTexto = 'Sub-temas: Parámetros i, ii, iii y iv. Se está coordinando y definiendo realizar una actualización de parametros poblacionales en Reserva de la Biósfera La Campana-Peñuelas, comenzando por esta zona de Casablanca';
                     } 
-                    // 3. CONDICIÓN: Reducción o mitigación de amenazas (Jose Caro)
                     else if (categoria === 'Reducción o mitigación de amenazas' && academicos === 'Jose Caro') {
                         descripcionTexto = 'Operativo Veterinario de mascotas<br><br>c. Vacunación:<br><br>A partir de los fondos disponibles de la Sebsecretaría de Desarrollo Regional (SUBDERE) para la vacunación y esterilización de mascotas, Guardaparques del Parque Nacional Radal Siete Tazas gestionan la posibilidad de otorgar a la localidad de Radal, como una zona prioritaria para implementar este programa en la comunda de Molina. Para ello, Guardaparques gestionan con la Dirección de Desarrollo Comunal de Molina (DIDECO) el operativo veterinario en Radal y colaboran en la coordinación den terreno a través de la Junta de vecinos. En total se abordaron más de 30 mascotas, aunque en su gran mayoría fueron perros, teniendo muchos problemas para la vacunación de gatos debido a la dificultad de sus dueños para manipularlos. Fecha: 2019.';
                     }
-                    // 4. CONDICIÓN: Iniciativas de Educación y difusión (Jose Caro)
                     else if (categoria === 'Iniciativas de Educación y difusión' && academicos === 'Jose Caro') {
                         descripcionTexto = 'Taller "Protectores de la Güiña"-Escuela Radal<br><br>b. Educación escolar no-formal: Taller desarrollado en la Escuela El Radal, con 10 niñas/os de la comunidad entre 4 y 14 años, para que conocieran y valorizaran a uno de los objetos de conservación del parque nacional, como es la Güiña. La actividad estuvo organizada por 3 personas pertenecientes al Plan de Educación Ambiental de la Güiña, y la colaboración y participación de Guardaparques del Parque Nacional Radal Siete Tazas. Fecha: 2018.';
                     }
-                    // 5. CONDICIÓN Y DESCRIPCIÓN FINAL: Monitoreo o muestreo de la especie (Jose Caro)
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Jose Caro') {
                         descripcionTexto = 'a. Parque Nacional Radal Siete Tazas<br>b. Bosque esclerófilo (de montaña) y Bosque caducifolio<br>c. Parámetros de ocupación ("Naïve", sin corrección por tasa de detección u otras variables) Fecha: 2019-2023. Implementación del monitoreo con cámaras trampas en el Parque Nacional y el análisis de los resultados de ocupación simple, desde el año 2019 al 2023. Después siguieron con el monitoreo los colegas Guardaparques del parque nacional.';
                     }
@@ -335,7 +332,7 @@
                 layIniciativas.addTo(map);
                 
                 // =========================================================================
-                // VISOR DE COORDENADAS
+                // VISOR DE COORDENADAS (CORREGIDO)
                 // =========================================================================
 
                 var MousePosition = L.Control.extend({
@@ -355,6 +352,7 @@
                     }
                 });
 
+                // Asegura que el visor de coordenadas se añade al mapa
                 new MousePosition({position: 'bottomleft'}).addTo(map);
                 
                 setBounds();
