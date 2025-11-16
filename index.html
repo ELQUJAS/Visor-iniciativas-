@@ -1,362 +1,362 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css">
-        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
-        <link rel="stylesheet" href="css/qgis2web.css">
-        <link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet.photon.css">
-        
-        <style>
-        /* ESTILO CRUCIAL PARA QUE EL MAPA OCUPE TODA LA PANTALLA */
-        html, body, #map {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-        /* Estilos para los puntos de color en la leyenda */
-        .legend-point {
-            display: inline-block;
-            width: 10px; 
-            height: 10px;
-            margin-right: 5px;
-            border-radius: 50%; 
-            border: 1px solid #333; 
-            vertical-align: middle;
-        }
-        /* Definición de colores por categoría */
-        .green { background-color: rgba(84,205,66,1.0); } 
-        .white { background-color: rgba(255,255,255,1.0); } 
-        .yellow { background-color: rgba(255,241,0,1.0); } 
-        .blue { background-color: rgba(0,240,255,1.0); } 
-        .red { background-color: rgba(255,0,24,1.0); } 
-        .magenta { background-color: rgba(255,0,205,1.0); } 
-        
-        /* [CSS para Leyendas] */
-        .leaflet-bottom { position: fixed; }
-        .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree { background-color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.2); }
-        .leaflet-bottom.leaflet-right .leaflet-control-layers-toggle { display: none !important; }
-        .leaflet-bottom.leaflet-right .leaflet-control-layers-expanded { padding: 6px; padding-top: 10px; }
-        
-        /* [CSS para el Visor de Coordenadas nativo] */
-        .leaflet-control-mouseposition {
-            background-color: rgba(255, 255, 255, 0.8); 
-            padding: 5px 8px;
-            font-size: 13px;
-            color: #333;
-            border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.2);
-            margin-bottom: 10px; 
-            margin-left: 10px;  
-            pointer-events: auto; 
-            display: inline-block;
-        }
-        
-        </style>
-        <title></title>
-    </head>
-    <body>
-        <div id="map">
-        </div>
-        <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script>
-        <script src="js/L.Control.Layers.Tree.min.js"></script>
-        <script src="js/leaflet.rotatedMarker.js"></script>
-        <script src="js/leaflet.pattern.js"></script>
-        <script src="js/leaflet-hash.js"></script>
-        <script src="js/Autolinker.min.js"></script>
-        <script src="js/rbush.min.js"></script>
-        <script src="js/labelgun.min.js"></script>
-        <script src="js/labels.js"></script>
-        <script src="js/leaflet.photon.js"></script>
-        
-        <script src="data/temp5_2.js"></script>
-        
-        <script>
-            // CORRECCIÓN CLAVE: Función que se ejecuta inmediatamente (patrón IIFE)
-            (function() {
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet.photon.css">
+        
+        <style>
+        /* CORRECCIÓN: ESTILO CRUCIAL PARA QUE EL MAPA OCUPE TODA LA PANTALLA */
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        /* Estilos para los puntos de color en la leyenda */
+        .legend-point {
+            display: inline-block;
+            width: 10px; 
+            height: 10px;
+            margin-right: 5px;
+            border-radius: 50%; 
+            border: 1px solid #333; 
+            vertical-align: middle;
+        }
+        /* Definición de colores por categoría */
+        .green { background-color: rgba(84,205,66,1.0); } 
+        .white { background-color: rgba(255,255,255,1.0); } 
+        .yellow { background-color: rgba(255,241,0,1.0); } 
+        .blue { background-color: rgba(0,240,255,1.0); } 
+        .red { background-color: rgba(255,0,24,1.0); } 
+        .magenta { background-color: rgba(255,0,205,1.0); } 
+        
+        /* [CSS para Leyendas] */
+        .leaflet-bottom { position: fixed; }
+        .leaflet-bottom.leaflet-right .leaflet-control-layers.leaflet-control-layers-tree { background-color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.2); }
+        .leaflet-bottom.leaflet-right .leaflet-control-layers-toggle { display: none !important; }
+        .leaflet-bottom.leaflet-right .leaflet-control-layers-expanded { padding: 6px; padding-top: 10px; }
+        
+        /* [CSS para el Visor de Coordenadas nativo] */
+        .leaflet-control-mouseposition {
+            background-color: rgba(255, 255, 255, 0.8); 
+            padding: 5px 8px;
+            font-size: 13px;
+            color: #333;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.2);
+            margin-bottom: 10px; 
+            margin-left: 10px;  
+            pointer-events: auto; 
+            display: inline-block;
+        }
+        
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.photon.js"></script>
+        
+        <script src="data/temp5_2.js"></script>
+        
+        <script>
+            // CORRECCIÓN CLAVE: Función que se ejecuta inmediatamente (patrón IIFE)
+            (function() {
 
-                // [Funciones de Highlight y Map Setup]
-                var highlightLayer;
-                function highlightFeature(e) {
-                    highlightLayer = e.target;
-                    if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
-                      highlightLayer.setStyle({ color: '#ffff00', });
-                    } else {
-                      highlightLayer.setStyle({ fillColor: '#ffff00', fillOpacity: 1 });
-                    }
-                }
+                // [Funciones de Highlight y Map Setup]
+                var highlightLayer;
+                function highlightFeature(e) {
+                    highlightLayer = e.target;
+                    if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
+                      highlightLayer.setStyle({ color: '#ffff00', });
+                    } else {
+                      highlightLayer.setStyle({ fillColor: '#ffff00', fillOpacity: 1 });
+                    }
+                }
 
-                // Inicialización del Mapa
-                var map = L.map('map', {
-                    zoomControl:false, maxZoom:28, minZoom:1
-                }).fitBounds([[-35.654545548961444,-71.58858503288076],[-35.13259820098246,-70.38275026311662]]);
+                // Inicialización del Mapa
+                var map = L.map('map', {
+                    zoomControl:false, maxZoom:28, minZoom:1
+                }).fitBounds([[-35.654545548961444,-71.58858503288076],[-35.13259820098246,-70.38275026311662]]);
 
-                var hash = new L.Hash(map);
-                map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
-                var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-                
-                // [Funciones auxiliares para Pop-up]
-                function removeEmptyRowsFromPopupContent(content, feature) { 
-                   var tempDiv = document.createElement('div');
-                   tempDiv.innerHTML = content;
-                   var rows = tempDiv.querySelectorAll('tr');
-                   for (var i = 0; i < rows.length; i++) {
-                       var td = rows[i].querySelector('td.visible-with-data');
-                       var key = td ? td.id : '';
-                       if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
-                           rows[i].parentNode.removeChild(rows[i]);
-                       }
-                   }
-                   return tempDiv.innerHTML;
-                }
-                function addClassToPopupIfMedia(content, popup) { 
-                      var tempDiv = document.createElement('div');
-                      tempDiv.innerHTML = content;
-                      var imgTd = tempDiv.querySelector('td img');
-                      if (imgTd) {
-                          var src = imgTd.getAttribute('src');
-                          if (/\.(jpg|jpeg|png|gif|bmp|webp|avif)$/i.test(src)) {
-                              popup._contentNode.classList.add('media');
-                              setTimeout(function() { popup.update(); }, 10);
-                          } else if (/\.(mp3|wav|ogg|aac)$/i.test(src)) {
-                              var audio = document.createElement('audio');
-                              audio.controls = true; audio.src = src;
-                              imgTd.parentNode.replaceChild(audio, imgTd);
-                              popup._contentNode.classList.add('media');
-                              setTimeout(function() { popup.setContent(tempDiv.innerHTML); popup.update(); }, 10);
-                          } else if (/\.(mp4|webm|ogg|mov)$/i.test(src)) {
-                              var video = document.createElement('video');
-                              video.controls = true; video.src = src;
-                              video.style.width = "400px"; video.style.height = "300px";
-                              video.style.maxHeight = "60vh"; video.style.maxWidth = "60vw";
-                              imgTd.parentNode.replaceChild(video, imgTd);
-                              popup._contentNode.classList.add('media');
-                              video.addEventListener('loadedmetadata', function() { popup.update(); });
-                              setTimeout(function() { popup.setContent(tempDiv.innerHTML); popup.update(); }, 10);
-                          } else {
-                              popup._contentNode.classList.remove('media');
-                          }
-                      } else {
-                          popup._contentNode.classList.remove('media');
-                      }
-                }
-                
-                var zoomControl = L.control.zoom({ position: 'topleft' }).addTo(map);
-                var bounds_group = new L.featureGroup([]);
-                function setBounds() { }
-                
-                // Capas Base
-                map.createPane('pane_OpenStreetMap_0');
-                map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
-                var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    pane: 'pane_OpenStreetMap_0', opacity: 1.0, attribution: '', minZoom: 1, maxZoom: 28, minNativeZoom: 0, maxNativeZoom: 19
-                });
-                layer_OpenStreetMap_0;
-                map.addLayer(layer_OpenStreetMap_0);
-                map.createPane('pane_GoogleSatellite_1');
-                map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
-                var layer_GoogleSatellite_1 = L.tileLayer('http://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-                    pane: 'pane_GoogleSatellite_1', opacity: 1.0, attribution: '', minZoom: 1, maxZoom: 28, minNativeZoom: 0, maxNativeZoom: 22
-                });
-                layer_GoogleSatellite_1;
-                map.addLayer(layer_GoogleSatellite_1);
+                var hash = new L.Hash(map);
+                map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+                var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+                
+                // [Funciones auxiliares para Pop-up]
+                function removeEmptyRowsFromPopupContent(content, feature) { 
+                   var tempDiv = document.createElement('div');
+                   tempDiv.innerHTML = content;
+                   var rows = tempDiv.querySelectorAll('tr');
+                   for (var i = 0; i < rows.length; i++) {
+                       var td = rows[i].querySelector('td.visible-with-data');
+                       var key = td ? td.id : '';
+                       if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                           rows[i].parentNode.removeChild(rows[i]);
+                       }
+                   }
+                   return tempDiv.innerHTML;
+                }
+                function addClassToPopupIfMedia(content, popup) { 
+                      var tempDiv = document.createElement('div');
+                      tempDiv.innerHTML = content;
+                      var imgTd = tempDiv.querySelector('td img');
+                      if (imgTd) {
+                          var src = imgTd.getAttribute('src');
+                          if (/\.(jpg|jpeg|png|gif|bmp|webp|avif)$/i.test(src)) {
+                              popup._contentNode.classList.add('media');
+                              setTimeout(function() { popup.update(); }, 10);
+                          } else if (/\.(mp3|wav|ogg|aac)$/i.test(src)) {
+                              var audio = document.createElement('audio');
+                              audio.controls = true; audio.src = src;
+                              imgTd.parentNode.replaceChild(audio, imgTd);
+                              popup._contentNode.classList.add('media');
+                              setTimeout(function() { popup.setContent(tempDiv.innerHTML); popup.update(); }, 10);
+                          } else if (/\.(mp4|webm|ogg|mov)$/i.test(src)) {
+                              var video = document.createElement('video');
+                              video.controls = true; video.src = src;
+                              video.style.width = "400px"; video.style.height = "300px";
+                              video.style.maxHeight = "60vh"; video.style.maxWidth = "60vw";
+                              imgTd.parentNode.replaceChild(video, imgTd);
+                              popup._contentNode.classList.add('media');
+                              video.addEventListener('loadedmetadata', function() { popup.update(); });
+                              setTimeout(function() { popup.setContent(tempDiv.innerHTML); popup.update(); }, 10);
+                          } else {
+                              popup._contentNode.classList.remove('media');
+                          }
+                      } else {
+                          popup._contentNode.classList.remove('media');
+                      }
+                }
+                
+                var zoomControl = L.control.zoom({ position: 'topleft' }).addTo(map);
+                var bounds_group = new L.featureGroup([]);
+                function setBounds() { }
+                
+                // Capas Base
+                map.createPane('pane_OpenStreetMap_0');
+                map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
+                var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    pane: 'pane_OpenStreetMap_0', opacity: 1.0, attribution: '', minZoom: 1, maxZoom: 28, minNativeZoom: 0, maxNativeZoom: 19
+                });
+                layer_OpenStreetMap_0;
+                map.addLayer(layer_OpenStreetMap_0);
+                map.createPane('pane_GoogleSatellite_1');
+                map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
+                var layer_GoogleSatellite_1 = L.tileLayer('http://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                    pane: 'pane_GoogleSatellite_1', opacity: 1.0, attribution: '', minZoom: 1, maxZoom: 28, minNativeZoom: 0, maxNativeZoom: 22
+                });
+                layer_GoogleSatellite_1;
+                map.addLayer(layer_GoogleSatellite_1);
 
-                // =========================================================================
-                // FUNCIÓN POP-UP (APLICANDO LA MODIFICACIÓN DE ID 20)
-                // =========================================================================
-                function pop_temp5_2(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') { e.target._eventParents[i].resetStyle(e.target); } } },
-                        mouseover: highlightFeature,
-                    });
+                // =========================================================================
+                // FUNCIÓN POP-UP (APLICANDO LA MODIFICACIÓN DE ID 20)
+                // =========================================================================
+                function pop_temp5_2(feature, layer) {
+                    layer.on({
+                        mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') { e.target._eventParents[i].resetStyle(e.target); } } },
+                        mouseover: highlightFeature,
+                    });
 
-                    var descripcionTexto;
-                    var categoria = feature.properties['Categorias'];
-                    var academicos = feature.properties['Academicos'];
-                    // 🔑 LECTURA DEL ID TEMPORAL INYECTADO
-                    var puntoID = feature.properties['__temp_id']; 
+                    var descripcionTexto;
+                    var categoria = feature.properties['Categorias'];
+                    var academicos = feature.properties['Academicos'];
+                    // 🔑 LECTURA DEL ID TEMPORAL INYECTADO
+                    var puntoID = feature.properties['__temp_id']; 
 
-                    // 🅰️ LÓGICA DE EDICIÓN INDIVIDUAL (PRIORIDAD AL ID)
-                    if (puntoID === 5) { 
-                        descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
-                    } 
-                    // MODIFICACIÓN APLICADA: ID 20 A BOSQUE NATIVO ESPINOSO
-                    else if (puntoID === 20) {
-                        descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Bosque Nativo Espinoso)';
-                    }
-                    else if (puntoID === 12) {
-                        descripcionTexto = 'a. Áreas agrícolas<br>b. Paisajes agrícolas<br>c. Parámetros de ocupación<br><br>**PAPERS ASOCIADOS:**<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab074" target="_blank">https://doi.org/10.1093/jmammal/gyab074</a>';
-                    } 
-                    else if (puntoID === 14) {
-                        descripcionTexto = 'a. Área protegida. Parque Nacional Villarrica<br>b. Bosque templado andino<br>c. parámetros descriptivos<br><br>Parte del monitoreo escolar de fauna silvestre. Detalles del monitoreo en el libro <a href="https://www.dropbox.com/scl/fo/9svmtrtr4lwfrmrgc33si/ALNzadgKfF77oe9d2qGA_8k?rlkey=csfeehjlq2jx3v2dyi6tvdowj&dl=0" target="_blank">https://www.dropbox.com/scl/fo/9svmtrtr4lwfrmrgc33si/ALNzadgKfF77oe9d2qGA_8k?rlkey=csfeehjlq2jx3v2dyi6tvdowj&dl=0</a> y descripción del proyecto <a href="https://www.youtube.com/watch?v=YPsbILPuxJU" target="_blank">https://www.youtube.com/watch?v=YPsbILPuxJU</a>';
-                    }
-                    else if (puntoID === 45) {
-                        descripcionTexto = 'a. Fundación para la Conservación Ambiental y Zoológica<br><br>Apoyo a las iniciativas de conservación de un fragmento continuo de 300-400 hectáreas. Monitoreo con Cámaras trampa desde el 2016. Registros en Wildlife Insights.<br><br>Apoyo al monitoreo y y protocolos de manejo para la conservación.';
-                    }
-                    // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS EXISTENTES)
-                    // Esta regla se mantiene como fallback para otros puntos de Diego Ramirez que no sean el ID 20.
-                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
-                        descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
-                    } 
-                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Beltrami') {
-                        descripcionTexto = 'Sub-temas: Parámetros i, ii, iii y iv. Se está coordinando y definiendo realizar una actualización de parametros poblacionales en Reserva de la Biósfera La Campana-Peñuelas, comenzando por esta zona de Casablanca';
-                    } 
-                    else if (categoria === 'Reducción o mitigación de amenazas' && academicos === 'Jose Caro') {
-                        descripcionTexto = 'Operativo Veterinario de mascotas<br><br>c. Vacunación:<br><br>A partir de los fondos disponibles de la Sebsecretaría de Desarrollo Regional (SUBDERE) para la vacunación y esterilización de mascotas, Guardaparques del Parque Nacional Radal Siete Tazas gestionan la posibilidad de otorgar a la localidad de Radal, como una zona prioritaria para implementar este programa en la comunda de Molina. Para ello, Guardaparques gestionan con la Dirección de Desarrollo Comunal de Molina (DIDECO) el operativo veterinario en Radal y colaboran en la coordinación den terreno a través de la Junta de vecinos. En total se abordaron más de 30 mascotas, aunque en su gran mayoría fueron perros, teniendo muchos problemas para la vacunación de gatos debido a la dificultad de sus dueños para manipularlos. Fecha: 2019.';
-                    }
-                    else if (categoria === 'Iniciativas de Educación y difusión' && academicos === 'Jose Caro') {
-                        descripcionTexto = 'Taller "Protectores de la Güiña"-Escuela Radal<br><br>b. Educación escolar no-formal: Taller desarrollado en la Escuela El Radal, con 10 niñas/os de la comunidad entre 4 y 14 años, para que conocieran y valoraran a uno de los objetos de conservación del parque nacional, como es la Güiña. La actividad estuvo organizada por 3 personas pertenecientes al Plan de Educación Ambiental de la Güiña, y la colaboración y participación de Guardaparques del Parque Nacional Radal Siete Tazas. Fecha: 2018.';
-                    }
-                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Jose Caro') {
-                        descripcionTexto = 'a. Parque Nacional Radal Siete Tazas<br>b. Bosque esclerófilo (de montaña) y Bosque caducifolio<br>c. Parámetros de ocupación ("Naïve", sin corrección por tasa de detección u otras variables) Fecha: 2019-2023. Implementación del monitoreo con cámaras trampas en el Parque Nacional y el análisis de los resultados de ocupación simple, desde el año 2019 al 2023. Después siguieron con el monitoreo los colegas Guardaparques del parque nacional.';
-                    }
-                    // 6. VALOR POR DEFECTO
-                    else {
-                        descripcionTexto = feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '';
-                    }
+                    // 🅰️ LÓGICA DE EDICIÓN INDIVIDUAL (PRIORIDAD AL ID)
+                    if (puntoID === 5) { 
+                        descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
+                    } 
+                    // MODIFICACIÓN APLICADA: ID 20 A BOSQUE NATIVO ESPINOSO
+                    else if (puntoID === 20) {
+                        descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Bosque Nativo Espinoso)';
+                    }
+                    else if (puntoID === 12) {
+                        descripcionTexto = 'a. Áreas agrícolas<br>b. Paisajes agrícolas<br>c. Parámetros de ocupación<br><br>**PAPERS ASOCIADOS:**<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab074" target="_blank">https://doi.org/10.1093/jmammal/gyab074</a>';
+                    } 
+                    else if (puntoID === 14) {
+                        descripcionTexto = 'a. Área protegida. Parque Nacional Villarrica<br>b. Bosque templado andino<br>c. parámetros descriptivos<br><br>Parte del monitoreo escolar de fauna silvestre. Detalles del monitoreo en el libro <a href="https://www.dropbox.com/scl/fo/9svmtrtr4lwfrmrgc33si/ALNzadgKfF77oe9d2qGA_8k?rlkey=csfeehjlq2jx3v2dyi6tvdowj&dl=0" target="_blank">https://www.dropbox.com/scl/fo/9svmtrtr4lwfrmrgc33si/ALNzadgKfF77oe9d2qGA_8k?rlkey=csfeehjlq2jx3v2dyi6tvdowj&dl=0</a> y descripción del proyecto <a href="https://www.youtube.com/watch?v=YPsbILPuxJU" target="_blank">https://www.youtube.com/watch?v=YPsbILPuxJU</a>';
+                    }
+                    else if (puntoID === 45) {
+                        descripcionTexto = 'a. Fundación para la Conservación Ambiental y Zoológica<br><br>Apoyo a las iniciativas de conservación de un fragmento continuo de 300-400 hectáreas. Monitoreo con Cámaras trampa desde el 2016. Registros en Wildlife Insights.<br><br>Apoyo al monitoreo y y protocolos de manejo para la conservación.';
+                    }
+                    // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS EXISTENTES)
+                    // Esta regla se mantiene como fallback para otros puntos de Diego Ramirez que no sean el ID 20.
+                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
+                        descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
+                    } 
+                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Beltrami') {
+                        descripcionTexto = 'Sub-temas: Parámetros i, ii, iii y iv. Se está coordinando y definiendo realizar una actualización de parametros poblacionales en Reserva de la Biósfera La Campana-Peñuelas, comenzando por esta zona de Casablanca';
+                    } 
+                    else if (categoria === 'Reducción o mitigación de amenazas' && academicos === 'Jose Caro') {
+                        descripcionTexto = 'Operativo Veterinario de mascotas<br><br>c. Vacunación:<br><br>A partir de los fondos disponibles de la Sebsecretaría de Desarrollo Regional (SUBDERE) para la vacunación y esterilización de mascotas, Guardaparques del Parque Nacional Radal Siete Tazas gestionan la posibilidad de otorgar a la localidad de Radal, como una zona prioritaria para implementar este programa en la comunda de Molina. Para ello, Guardaparques gestionan con la Dirección de Desarrollo Comunal de Molina (DIDECO) el operativo veterinario en Radal y colaboran en la coordinación den terreno a través de la Junta de vecinos. En total se abordaron más de 30 mascotas, aunque en su gran mayoría fueron perros, teniendo muchos problemas para la vacunación de gatos debido a la dificultad de sus dueños para manipularlos. Fecha: 2019.';
+                    }
+                    else if (categoria === 'Iniciativas de Educación y difusión' && academicos === 'Jose Caro') {
+                        descripcionTexto = 'Taller "Protectores de la Güiña"-Escuela Radal<br><br>b. Educación escolar no-formal: Taller desarrollado en la Escuela El Radal, con 10 niñas/os de la comunidad entre 4 y 14 años, para que conocieran y valoraran a uno de los objetos de conservación del parque nacional, como es la Güiña. La actividad estuvo organizada por 3 personas pertenecientes al Plan de Educación Ambiental de la Güiña, y la colaboración y participación de Guardaparques del Parque Nacional Radal Siete Tazas. Fecha: 2018.';
+                    }
+                    else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Jose Caro') {
+                        descripcionTexto = 'a. Parque Nacional Radal Siete Tazas<br>b. Bosque esclerófilo (de montaña) y Bosque caducifolio<br>c. Parámetros de ocupación ("Naïve", sin corrección por tasa de detección u otras variables) Fecha: 2019-2023. Implementación del monitoreo con cámaras trampas en el Parque Nacional y el análisis de los resultados de ocupación simple, desde el año 2019 al 2023. Después siguieron con el monitoreo los colegas Guardaparques del parque nacional.';
+                    }
+                    // 6. VALOR POR DEFECTO
+                    else {
+                        descripcionTexto = feature.properties['Descrip_'] !== null ? autolinker.link(String(feature.properties['Descrip_']).replace(/'/g, '\'').toLocaleString()) : '';
+                    }
 
-                    var popupContent = '<table>\
-                                        <tr>\
-                                            <th scope="row">ID del Punto:</th>\
-                                            <td>' + (feature.properties['__temp_id'] !== null ? autolinker.link(String(feature.properties['__temp_id']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
-                                        </tr>\
-                                        <tr>\
-                                            <th scope="row">Categoría:</th>\
-                                            <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                                        </tr>\
-                                        <tr>\
-                                            <th scope="row">Descripción:</th>\
-                                            <td>' + descripcionTexto + '</td>\
-                                        </tr>\
-                                        <tr>\
-                                            <th scope="row">Académicos:</th>\
-                                            <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                                        </tr>\
-                                    </table>';
-                                    
-                    var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-                    layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
-                    layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); 
-                }
-                
-                // [Funciones de Estilo Individual y Creación de Capas]
-                function style_ApoyoConservacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(84,205,66,1.0)', interactive: true, } }
-                function style_ApoyoPrivadas(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,255,255,1.0)', interactive: true, } }
-                function style_EducacionDifusion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,241,0,1.0)', interactive: true, } }
-                function style_MonitoreoMuestreo(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,240,255,1.0)', interactive: true, } }
-                function style_ReduccionMitigacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,24,1.0)', interactive: true, } }
-                function style_RelevamientoGuignaHumanos(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,205,1.0)', interactive: true, } }
-                
-                // =========================================================================
-                // INYECTAR ID ÚNICO Y CREACIÓN DE CAPAS
-                // =========================================================================
+                    var popupContent = '<table>\
+                                            <tr>\
+                                                <th scope="row">ID del Punto:</th>\
+                                                <td>' + (feature.properties['__temp_id'] !== null ? autolinker.link(String(feature.properties['__temp_id']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
+                                            </tr>\
+                                            <tr>\
+                                                <th scope="row">Categoría:</th>\
+                                                <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                                            </tr>\
+                                            <tr>\
+                                                <th scope="row">Descripción:</th>\
+                                                <td>' + descripcionTexto + '</td>\
+                                            </tr>\
+                                            <tr>\
+                                                <th scope="row">Académicos:</th>\
+                                                <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                                            </tr>\
+                                        </table>';
+                                        
+                    var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+                    layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
+                    layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); 
+                }
+                
+                // [Funciones de Estilo Individual y Creación de Capas]
+                function style_ApoyoConservacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(84,205,66,1.0)', interactive: true, } }
+                function style_ApoyoPrivadas(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,255,255,1.0)', interactive: true, } }
+                function style_EducacionDifusion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,241,0,1.0)', interactive: true, } }
+                function style_MonitoreoMuestreo(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,240,255,1.0)', interactive: true, } }
+                function style_ReduccionMitigacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,24,1.0)', interactive: true, } }
+                function style_RelevamientoGuignaHumanos(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,205,1.0)', interactive: true, } }
+                
+                // =========================================================================
+                // INYECTAR ID ÚNICO Y CREACIÓN DE CAPAS
+                // =========================================================================
 
-                // Este bloque asigna un ID secuencial a cada punto (1, 2, 3, etc.)
-                for (i = 0; i < json_temp5_2.features.length; i++) {
-                    json_temp5_2.features[i].properties['__temp_id'] = i + 1; 
-                }
+                // Este bloque asigna un ID secuencial a cada punto (1, 2, 3, etc.)
+                for (i = 0; i < json_temp5_2.features.length; i++) {
+                    json_temp5_2.features[i].properties['__temp_id'] = i + 1; 
+                }
 
-                function filterFeature(category) { 
-                    return function(feature) { return feature.properties.Categorias === category; } 
-                }
+                function filterFeature(category) { 
+                    return function(feature) { return feature.properties.Categorias === category; } 
+                }
 
-                map.createPane('pane_temp5_2');
-                map.getPane('pane_temp5_2').style.zIndex = 402;
-                map.getPane('pane_temp5_2').style['mix-blend-mode'] = 'normal';
+                map.createPane('pane_temp5_2');
+                map.getPane('pane_temp5_2').style.zIndex = 402;
+                map.getPane('pane_temp5_2').style['mix-blend-mode'] = 'normal';
 
-                // Creación de capas usando los filtros y el GeoJSON modificado
-                var layer_ApoyoConservacion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoConservacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo Iniciativas de Conservación'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoConservacion(feature)); }, });
-                bounds_group.addLayer(layer_ApoyoConservacion);
-                map.addLayer(layer_ApoyoConservacion);
+                // Creación de capas usando los filtros y el GeoJSON modificado
+                var layer_ApoyoConservacion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoConservacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo Iniciativas de Conservación'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoConservacion(feature)); }, });
+                bounds_group.addLayer(layer_ApoyoConservacion);
+                map.addLayer(layer_ApoyoConservacion);
 
-                var layer_ApoyoPrivadas = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoPrivadas', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo iniciativas privadas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoPrivadas(feature)); }, });
-                bounds_group.addLayer(layer_ApoyoPrivadas);
-                map.addLayer(layer_ApoyoPrivadas);
+                var layer_ApoyoPrivadas = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ApoyoPrivadas', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Apoyo iniciativas privadas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ApoyoPrivadas(feature)); }, });
+                bounds_group.addLayer(layer_ApoyoPrivadas);
+                map.addLayer(layer_ApoyoPrivadas);
 
-                var layer_EducacionDifusion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_EducacionDifusion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Iniciativas de Educación y difusión'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_EducacionDifusion(feature)); }, });
-                bounds_group.addLayer(layer_EducacionDifusion);
-                map.addLayer(layer_EducacionDifusion);
+                var layer_EducacionDifusion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_EducacionDifusion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Iniciativas de Educación y difusión'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_EducacionDifusion(feature)); }, });
+                bounds_group.addLayer(layer_EducacionDifusion);
+                map.addLayer(layer_EducacionDifusion);
 
-                var layer_MonitoreoMuestreo = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_MonitoreoMuestreo', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Monitoreo o muestreo de la especie'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_MonitoreoMuestreo(feature)); }, });
-                bounds_group.addLayer(layer_MonitoreoMuestreo);
-                map.addLayer(layer_MonitoreoMuestreo);
+                var layer_MonitoreoMuestreo = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_MonitoreoMuestreo', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Monitoreo o muestreo de la especie'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_MonitoreoMuestreo(feature)); }, });
+                bounds_group.addLayer(layer_MonitoreoMuestreo);
+                map.addLayer(layer_MonitoreoMuestreo);
 
-                var layer_ReduccionMitigacion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ReduccionMitigacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Reducción o mitigación de amenazas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ReduccionMitigacion(feature)); }, });
-                bounds_group.addLayer(layer_ReduccionMitigacion);
-                map.addLayer(layer_ReduccionMitigacion);
+                var layer_ReduccionMitigacion = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_ReduccionMitigacion', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Reducción o mitigación de amenazas'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_ReduccionMitigacion(feature)); }, });
+                bounds_group.addLayer(layer_ReduccionMitigacion);
+                map.addLayer(layer_ReduccionMitigacion);
 
-                var layer_RelevamientoGuignaHumanos = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_RelevamientoGuignaHumanos', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Relevamiento de informacion sobre relacion guigna-humanos'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_RelevamientoGuignaHumanos(feature)); }, });
-                bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
-                map.addLayer(layer_RelevamientoGuignaHumanos);
+                var layer_RelevamientoGuignaHumanos = L.geoJson(json_temp5_2, { attribution: '', interactive: true, dataVar: 'json_temp5_2', layerName: 'layer_RelevamientoGuignaHumanos', pane: 'pane_temp5_2', onEachFeature: pop_temp5_2, filter: filterFeature('Relevamiento de informacion sobre relacion guigna-humanos'), pointToLayer: function (feature, latlng) { return L.circleMarker(latlng, style_RelevamientoGuignaHumanos(feature)); }, });
+                bounds_group.addLayer(layer_RelevamientoGuignaHumanos);
+                map.addLayer(layer_RelevamientoGuignaHumanos);
 
-                // =========================================================================
-                // LEYENDAS
-                // =========================================================================
+                // =========================================================================
+                // LEYENDAS
+                // =========================================================================
 
-                var overlaysTree_iniciativas = [
-                    {
-                        label: '🐾 **Categorías**', 
-                        selectAllCheckbox: true, 
-                        children: [
-                            {label: '<span class="legend-point green"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion},
-                            {label: '<span class="legend-point white"></span> Apoyo a Iniciativas Privadas', layer: layer_ApoyoPrivadas},
-                            {label: '<span class="legend-point yellow"></span> Educación y Difusión', layer: layer_EducacionDifusion},
-                            {label: '<span class="legend-point blue"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo},
-                            {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion},
-                            {label: '<span class="legend-point magenta"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos},
-                        ]
-                    }
-                ];
-                
-                var overlaysTree_mapasbase = [
-                    {
-                        label: '🌍 **Mapas Base**', 
-                        children: [
-                            {label: "Google Satellite", layer: layer_GoogleSatellite_1},
-                            {label: "OpenStreetMap", layer: layer_OpenStreetMap_0},
-                        ]
-                    }
-                ];
+                var overlaysTree_iniciativas = [
+                    {
+                        label: '🐾 **Categorías**', 
+                        selectAllCheckbox: true, 
+                        children: [
+                            {label: '<span class="legend-point green"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion},
+                            {label: '<span class="legend-point white"></span> Apoyo a Iniciativas Privadas', layer: layer_ApoyoPrivadas},
+                            {label: '<span class="legend-point yellow"></span> Educación y Difusión', layer: layer_EducacionDifusion},
+                            {label: '<span class="legend-point blue"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo},
+                            {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion},
+                            {label: '<span class="legend-point magenta"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos},
+                        ]
+                    }
+                ];
+                
+                var overlaysTree_mapasbase = [
+                    {
+                        label: '🌍 **Mapas Base**', 
+                        children: [
+                            {label: "Google Satellite", layer: layer_GoogleSatellite_1},
+                            {label: "OpenStreetMap", layer: layer_OpenStreetMap_0},
+                        ]
+                    }
+                ];
 
-                var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, { collapsed: true, position: 'topright' });
-                layMapasBase.addTo(map);
-                var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, { collapsed: false, position: 'bottomright'});
-                layIniciativas.addTo(map);
-                
-                // =========================================================================
-                // VISOR DE COORDENADAS
-                // =========================================================================
+                var layMapasBase = L.control.layers.tree(null, overlaysTree_mapasbase, { collapsed: true, position: 'topright' });
+                layMapasBase.addTo(map);
+                var layIniciativas = L.control.layers.tree(null, overlaysTree_iniciativas, { collapsed: false, position: 'bottomright'});
+                layIniciativas.addTo(map);
+                
+                // =========================================================================
+                // VISOR DE COORDENADAS
+                // =========================================================================
 
-                var MousePosition = L.Control.extend({
-                    onAdd: function(map) {
-                        this._div = L.DomUtil.create('div', 'leaflet-control-mouseposition');
-                        this._div.innerHTML = 'Mueva el ratón sobre el mapa';
-                        map.on('mousemove', this._update, this);
-                        return this._div;
-                    },
-                    onRemove: function(map) {
-                        map.off('mousemove', this._update, this);
-                    },
-                    _update: function(e) {
-                        var lat = e.latlng.lat.toFixed(4);
-                        var lon = e.latlng.lng.toFixed(4);
-                        this._div.innerHTML = 'Lat: ' + lat + ' | Lon: ' + lon;
-                    }
-                });
+                var MousePosition = L.Control.extend({
+                    onAdd: function(map) {
+                        this._div = L.DomUtil.create('div', 'leaflet-control-mouseposition');
+                        this._div.innerHTML = 'Mueva el ratón sobre el mapa';
+                        map.on('mousemove', this._update, this);
+                        return this._div;
+                    },
+                    onRemove: function(map) {
+                        map.off('mousemove', this._update, this);
+                    },
+                    _update: function(e) {
+                        var lat = e.latlng.lat.toFixed(4);
+                        var lon = e.latlng.lng.toFixed(4);
+                        this._div.innerHTML = 'Lat: ' + lat + ' | Lon: ' + lon;
+                    }
+                });
 
-                // Inicialización del control de coordenadas
-                new MousePosition({position: 'bottomleft'}).addTo(map);
-                
-                setBounds();
-            })(); // Final de la función de autoejecución (IIFE)
-        </script>
-        
-    </body>
+                // Inicialización del control de coordenadas
+                new MousePosition({position: 'bottomleft'}).addTo(map);
+                
+                setBounds();
+            })(); // Final de la función de autoejecución (IIFE)
+        </script>
+        
+    </body>
 </html>
