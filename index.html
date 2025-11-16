@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="css/leaflet.photon.css">
         
         <style>
-        /* CORRECCIÓN: ESTILO CRUCIAL PARA QUE EL MAPA OCUPE TODA LA PANTALLA */
+        /* CORRECCIÓN CRÍTICA: ESTILO PARA QUE EL MAPA OCUPE TODA LA PANTALLA */
         html, body, #map {
             width: 100%;
             height: 100%;
@@ -79,7 +79,7 @@
         <script src="data/temp5_2.js"></script>
         
         <script>
-            // CORRECCIÓN CLAVE: Función que se ejecuta inmediatamente (patrón IIFE)
+            // FUNCIÓN DE AUTORINICIALIZACIÓN (IIFE)
             (function() {
 
                 // [Funciones de Highlight y Map Setup]
@@ -169,7 +169,7 @@
                 map.addLayer(layer_GoogleSatellite_1);
 
                 // =========================================================================
-                // FUNCIÓN POP-UP (APLICANDO LA MODIFICACIÓN DE ID 20)
+                // FUNCIÓN POP-UP (CON TODAS LAS MODIFICACIONES DE DESCRIPCIÓN)
                 // =========================================================================
                 function pop_temp5_2(feature, layer) {
                     layer.on({
@@ -187,9 +187,13 @@
                     if (puntoID === 5) { 
                         descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
                     } 
-                    // MODIFICACIÓN APLICADA: ID 20 A BOSQUE NATIVO ESPINOSO
+                    // MODIFICACIÓN ID 20: BOSQUE NATIVO ESPINOSO
                     else if (puntoID === 20) {
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Bosque Nativo Espinoso)';
+                    }
+                    // MODIFICACIÓN ID 22: BOSQUE NATIVO ESCLEROFILO
+                    else if (puntoID === 22) {
+                        descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Bosque Nativo Esclerofilo)';
                     }
                     else if (puntoID === 12) {
                         descripcionTexto = 'a. Áreas agrícolas<br>b. Paisajes agrícolas<br>c. Parámetros de ocupación<br><br>**PAPERS ASOCIADOS:**<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab074" target="_blank">https://doi.org/10.1093/jmammal/gyab074</a>';
@@ -200,8 +204,7 @@
                     else if (puntoID === 45) {
                         descripcionTexto = 'a. Fundación para la Conservación Ambiental y Zoológica<br><br>Apoyo a las iniciativas de conservación de un fragmento continuo de 300-400 hectáreas. Monitoreo con Cámaras trampa desde el 2016. Registros en Wildlife Insights.<br><br>Apoyo al monitoreo y y protocolos de manejo para la conservación.';
                     }
-                    // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS EXISTENTES)
-                    // Esta regla se mantiene como fallback para otros puntos de Diego Ramirez que no sean el ID 20.
+                    // 🅱️ LÓGICA DE EDICIÓN POR CATEGORÍA Y ACADÉMICO (REGLAS GENERALES)
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
                     } 
@@ -240,7 +243,7 @@
                                                 <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                                             </tr>\
                                         </table>';
-                                        
+                        
                     var content = removeEmptyRowsFromPopupContent(popupContent, feature);
                     layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
                     layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); 
