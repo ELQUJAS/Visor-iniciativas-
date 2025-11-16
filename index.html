@@ -79,8 +79,8 @@
         <script src="data/temp5_2.js"></script>
         
         <script>
-            // SOLUCIÓN DE VISUALIZACIÓN: Inicialización de Leaflet dentro de window.onload
-            window.onload = function() {
+            // CORRECCIÓN CLAVE: Función que se ejecuta inmediatamente (patrón IIFE)
+            (function() {
 
                 // [Funciones de Highlight y Map Setup]
                 var highlightLayer;
@@ -192,7 +192,7 @@
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Bosque Nativo Espinoso)';
                     }
                     else if (puntoID === 12) {
-                        descripcionTexto = 'a. Áreas agrícolas<br>b. Paisajes agrícolas<br>c. Parámetros de ocupación<br><br>**PAPERS ASOCIADOS:**<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.13072</a><br><a href="https://doi.org/10.1111/1365-2664.14026" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab074" target="_blank">https://doi.org/10.1093/jmammal/gyab074</a>';
+                        descripcionTexto = 'a. Áreas agrícolas<br>b. Paisajes agrícolas<br>c. Parámetros de ocupación<br><br>**PAPERS ASOCIADOS:**<br><a href="https://doi.org/10.1111/1365-2664.13072" target="_blank">https://doi.org/10.1111/1365-2664.14026</a><br><a href="https://doi.org/10.1093/jmammal/gyab074" target="_blank">https://doi.org/10.1093/jmammal/gyab074</a>';
                     } 
                     else if (puntoID === 14) {
                         descripcionTexto = 'a. Área protegida. Parque Nacional Villarrica<br>b. Bosque templado andino<br>c. parámetros descriptivos<br><br>Parte del monitoreo escolar de fauna silvestre. Detalles del monitoreo en el libro <a href="https://www.dropbox.com/scl/fo/9svmtrtr4lwfrmrgc33si/ALNzadgKfF77oe9d2qGA_8k?rlkey=csfeehjlq2jx3v2dyi6tvdowj&dl=0" target="_blank">https://www.dropbox.com/scl/fo/9svmtrtr4lwfrmrgc33si/ALNzadgKfF77oe9d2qGA_8k?rlkey=csfeehjlq2jx3v2dyi6tvdowj&dl=0</a> y descripción del proyecto <a href="https://www.youtube.com/watch?v=YPsbILPuxJU" target="_blank">https://www.youtube.com/watch?v=YPsbILPuxJU</a>';
@@ -205,7 +205,6 @@
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Diego Ramirez') {
                         descripcionTexto = '2021 al 2022. Parametros ocupacion, abundancia relativa, patrones de actividad y densidad sin id individual.(Monocultivo Forestal)';
                     } 
-                    // ... (otras reglas por categoría/académico)
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Beltrami') {
                         descripcionTexto = 'Sub-temas: Parámetros i, ii, iii y iv. Se está coordinando y definiendo realizar una actualización de parametros poblacionales en Reserva de la Biósfera La Campana-Peñuelas, comenzando por esta zona de Casablanca';
                     } 
@@ -213,7 +212,7 @@
                         descripcionTexto = 'Operativo Veterinario de mascotas<br><br>c. Vacunación:<br><br>A partir de los fondos disponibles de la Sebsecretaría de Desarrollo Regional (SUBDERE) para la vacunación y esterilización de mascotas, Guardaparques del Parque Nacional Radal Siete Tazas gestionan la posibilidad de otorgar a la localidad de Radal, como una zona prioritaria para implementar este programa en la comunda de Molina. Para ello, Guardaparques gestionan con la Dirección de Desarrollo Comunal de Molina (DIDECO) el operativo veterinario en Radal y colaboran en la coordinación den terreno a través de la Junta de vecinos. En total se abordaron más de 30 mascotas, aunque en su gran mayoría fueron perros, teniendo muchos problemas para la vacunación de gatos debido a la dificultad de sus dueños para manipularlos. Fecha: 2019.';
                     }
                     else if (categoria === 'Iniciativas de Educación y difusión' && academicos === 'Jose Caro') {
-                        descripcionTexto = 'Taller "Protectores de la Güiña"-Escuela Radal<br><br>b. Educación escolar no-formal: Taller desarrollado en la Escuela El Radal, con 10 niñas/os de la comunidad entre 4 y 14 años, para que conocieran y valorizaran a uno de los objetos de conservación del parque nacional, como es la Güiña. La actividad estuvo organizada por 3 personas pertenecientes al Plan de Educación Ambiental de la Güiña, y la colaboración y participación de Guardaparques del Parque Nacional Radal Siete Tazas. Fecha: 2018.';
+                        descripcionTexto = 'Taller "Protectores de la Güiña"-Escuela Radal<br><br>b. Educación escolar no-formal: Taller desarrollado en la Escuela El Radal, con 10 niñas/os de la comunidad entre 4 y 14 años, para que conocieran y valoraran a uno de los objetos de conservación del parque nacional, como es la Güiña. La actividad estuvo organizada por 3 personas pertenecientes al Plan de Educación Ambiental de la Güiña, y la colaboración y participación de Guardaparques del Parque Nacional Radal Siete Tazas. Fecha: 2018.';
                     }
                     else if (categoria === 'Monitoreo o muestreo de la especie' && academicos === 'Jose Caro') {
                         descripcionTexto = 'a. Parque Nacional Radal Siete Tazas<br>b. Bosque esclerófilo (de montaña) y Bosque caducifolio<br>c. Parámetros de ocupación ("Naïve", sin corrección por tasa de detección u otras variables) Fecha: 2019-2023. Implementación del monitoreo con cámaras trampas en el Parque Nacional y el análisis de los resultados de ocupación simple, desde el año 2019 al 2023. Después siguieron con el monitoreo los colegas Guardaparques del parque nacional.';
@@ -332,7 +331,7 @@
                 layIniciativas.addTo(map);
                 
                 // =========================================================================
-                // VISOR DE COORDENADAS (CORREGIDO)
+                // VISOR DE COORDENADAS
                 // =========================================================================
 
                 var MousePosition = L.Control.extend({
@@ -352,11 +351,11 @@
                     }
                 });
 
-                // Asegura que el visor de coordenadas se añade al mapa
+                // Inicialización del control de coordenadas
                 new MousePosition({position: 'bottomleft'}).addTo(map);
                 
                 setBounds();
-            }; // Cierre de window.onload
+            })(); // Final de la función de autoejecución (IIFE)
         </script>
         
     </body>
