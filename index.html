@@ -188,6 +188,10 @@
                     if (puntoID === 3) { 
                         descripcionTexto = 'b. Instalación de señalética. El 29/5/2025, en conjunto con personal del Parque Nacional Nahuel Huapi se instala un cartel de disminucion de velocidad con imagen del gato guigna, en el marco de la campaña #Lentoporlafauna (fundacion ConGarra, Chile) y colaboracion con el GWG. El cartel se instala en la ruta que une Villa La Angostura al paso Cardenal Samoré con Chile, donde los vehiculos suelen circular a una velocidad elevada.';
                     } 
+                    // MODIFICACIÓN ID 19: Monitoreo P.N. Nahuel Huapi (FINAL)
+                    else if (puntoID === 19) {
+                        descripcionTexto = '(a) Parque Nacional Nahuel Huapi (b) Bosque Andino-Patagonico y Bosque Valdiviano. (c) Parametros i, ii Monitoreos con camaras-trampa entre octubre y abril desde 2022 hasta 2025 (a saeguir en 2026) para evaluar el efecto de factores antropicos y ambientales sobre la distribucion del Leopardus guigna y su interaccion con otros carnivoros nativos y domésticos. Desde diciembre de 2022 hasta marzo de 2023: relevamiento de percepciones y actitudes hacia Leopardus guigna y otras especies de carnivoros entre los pobladores del parque.';
+                    } 
                     else if (puntoID === 5) { 
                         descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
                     } 
@@ -252,23 +256,23 @@
                     }
 
                     var popupContent = '<table>\
-                                            <tr>\
-                                                <th scope="row">ID del Punto:</th>\
-                                                <td>' + (feature.properties['__temp_id'] !== null ? autolinker.link(String(feature.properties['__temp_id']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
-                                            </tr>\
-                                            <tr>\
-                                                <th scope="row">Categoría:</th>\
-                                                <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                                            </tr>\
-                                            <tr>\
-                                                <th scope="row">Descripción:</th>\
-                                                <td>' + descripcionTexto + '</td>\
-                                            </tr>\
-                                            <tr>\
-                                                <th scope="row">Académicos:</th>\
-                                                <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                                            </tr>\
-                                        </table>';
+                            <tr>\
+                                <th scope="row">ID del Punto:</th>\
+                                <td>' + (feature.properties['__temp_id'] !== null ? autolinker.link(String(feature.properties['__temp_id']).replace(/'/g, '\'').toLocaleString()) : 'N/A') + '</td>\
+                            </tr>\
+                            <tr>\
+                                <th scope="row">Categoría:</th>\
+                                <td>' + (feature.properties['Categorias'] !== null ? autolinker.link(String(feature.properties['Categorias']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                            </tr>\
+                            <tr>\
+                                <th scope="row">Descripción:</th>\
+                                <td>' + descripcionTexto + '</td>\
+                            </tr>\
+                            <tr>\
+                                <th scope="row">Académicos:</th>\
+                                <td>' + (feature.properties['Academicos'] !== null ? autolinker.link(String(feature.properties['Academicos']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                            </tr>\
+                        </table>';
                         
                     var content = removeEmptyRowsFromPopupContent(popupContent, feature);
                     layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
