@@ -30,13 +30,16 @@
             border: 1px solid #333; 
             vertical-align: middle;
         }
-        /* Definición de colores por categoría */
-        .green { background-color: rgba(84,205,66,1.0); } 
-        .white { background-color: rgba(255,255,255,1.0); } 
-        .yellow { background-color: rgba(255,241,0,1.0); } 
-        .blue { background-color: rgba(0,240,255,1.0); } 
-        .red { background-color: rgba(255,0,24,1.0); } 
-        .magenta { background-color: rgba(255,0,205,1.0); } 
+        
+        /* Definición de colores por categoría (Actualizado) */
+        .cyan { background-color: rgba(0,255,255,1.0); } /* Apoyo Conservación (Celeste Calipso) */
+        .lime { background-color: rgba(173,255,47,1.0); } /* Educación y Difusión (Verde Lima) */
+        .white { background-color: rgba(255,255,255,1.0); } /* Apoyo Privadas (Blanco) */
+        .yellow { background-color: rgba(255,241,0,1.0); } /* Monitoreo (Amarillo) */
+        .blue { background-color: rgba(0,0,255,1.0); } /* Relevamiento (Azul Puro) */
+        .red { background-color: rgba(255,0,24,1.0); } /* Reducción Amenazas (Rojo) */
+        .magenta { background-color: rgba(255,0,205,1.0); } /* Sin uso directo, mantenido de la versión original */
+        .green { background-color: rgba(84,205,66,1.0); } /* Sin uso directo, mantenido de la versión original */
         
         /* [CSS para Leyendas] */
         .leaflet-bottom { position: fixed; }
@@ -283,13 +286,24 @@
                     layer.bindPopup(content, { maxHeight: 400, minWidth: 350, maxWidth: 500 }); 
                 }
                 
-                // [Funciones de Estilo Individual y Creación de Capas]
-                function style_ApoyoConservacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(84,205,66,1.0)', interactive: true, } }
+                // [Funciones de Estilo Individual y Creación de Capas] (Actualizado)
+                // Apoyo Conservación -> Celeste Calipso (Cyan)
+                function style_ApoyoConservacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,255,255,1.0)', interactive: true, } } 
+                
+                // Apoyo Privadas -> Blanco
                 function style_ApoyoPrivadas(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,255,255,1.0)', interactive: true, } }
-                function style_EducacionDifusion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,241,0,1.0)', interactive: true, } }
-                function style_MonitoreoMuestreo(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,240,255,1.0)', interactive: true, } }
-                function style_ReduccionMitigacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,24,1.0)', interactive: true, } }
-                function style_RelevamientoGuignaHumanos(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,205,1.0)', interactive: true, } }
+                
+                // Educación y Difusión -> Verde Lima
+                function style_EducacionDifusion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(173,255,47,1.0)', interactive: true, } } 
+                
+                // Monitoreo o Muestreo -> Amarillo (Yellow)
+                function style_MonitoreoMuestreo(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,241,0,1.0)', interactive: true, } }
+                
+                // Reducción o Mitigación -> Rojo (Red)
+                function style_ReduccionMitigacion(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(255,0,24,1.0)', interactive: true, } } 
+                
+                // Relevamiento Guigna-Humanos -> Azul (Blue)
+                function style_RelevamientoGuignaHumanos(feature) { return { pane: 'pane_temp5_2', radius: 8.0, opacity: 1, color: 'rgba(35,35,35,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1, fill: true, fillOpacity: 1, fillColor: 'rgba(0,0,255,1.0)', interactive: true, } } 
                 
                 // =========================================================================
                 // INYECTAR ID ÚNICO Y CREACIÓN DE CAPAS
@@ -334,7 +348,7 @@
                 map.addLayer(layer_RelevamientoGuignaHumanos);
 
                 // =========================================================================
-                // LEYENDAS
+                // LEYENDAS (Actualizado)
                 // =========================================================================
 
                 var overlaysTree_iniciativas = [
@@ -342,12 +356,18 @@
                         label: '🐾 **Categorías**', 
                         selectAllCheckbox: true, 
                         children: [
-                            {label: '<span class="legend-point green"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion},
+                            // Apoyo Conservación -> Cyan
+                            {label: '<span class="legend-point cyan"></span> Apoyo a Iniciativas de Conservación', layer: layer_ApoyoConservacion}, 
+                            // Apoyo Privadas -> Blanco
                             {label: '<span class="legend-point white"></span> Apoyo a Iniciativas Privadas', layer: layer_ApoyoPrivadas},
-                            {label: '<span class="legend-point yellow"></span> Educación y Difusión', layer: layer_EducacionDifusion},
-                            {label: '<span class="legend-point blue"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo},
-                            {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion},
-                            {label: '<span class="legend-point magenta"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos},
+                            // Educación y Difusión -> Verde Lima
+                            {label: '<span class="legend-point lime"></span> Educación y Difusión', layer: layer_EducacionDifusion}, 
+                            // Monitoreo -> Amarillo
+                            {label: '<span class="legend-point yellow"></span> Monitoreo o Muestreo de la Especie', layer: layer_MonitoreoMuestreo}, 
+                            // Reducción Amenazas -> Rojo
+                            {label: '<span class="legend-point red"></span> Reducción y Mitigación de Amenazas', layer: layer_ReduccionMitigacion}, 
+                            // Relevamiento -> Azul
+                            {label: '<span class="legend-point blue"></span> Relación Güiña-Humanos (Relevamiento)', layer: layer_RelevamientoGuignaHumanos}, 
                         ]
                     }
                 ];
