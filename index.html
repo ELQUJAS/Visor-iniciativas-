@@ -184,7 +184,11 @@
                     var puntoID = feature.properties['__temp_id']; 
 
                     // 🅰️ LÓGICA DE EDICIÓN INDIVIDUAL (PRIORIDAD AL ID)
-                    if (puntoID === 5) { 
+                    // MODIFICACIÓN ID 3: Instalación de señalética (FINAL)
+                    if (puntoID === 3) { 
+                        descripcionTexto = 'b. Instalación de señalética. El 29/5/2025, en conjunto con personal del Parque Nacional Nahuel Huapi se instala un cartel de disminucion de velocidad con imagen del gato guigna, en el marco de la campaña #Lentoporlafauna (fundacion ConGarra, Chile) y colaboracion con el GWG. El cartel se instala en la ruta que une Villa La Angostura al paso Cardenal Samoré con Chile, donde los vehiculos suelen circular a una velocidad elevada.';
+                    } 
+                    else if (puntoID === 5) { 
                         descripcionTexto = 'Descripción especial para el punto 5: ¡Este es un hito importante!';
                     } 
                     // MODIFICACIÓN ID 20: BOSQUE NATIVO ESPINOSO
@@ -219,7 +223,7 @@
                     else if (puntoID === 38) {
                         descripcionTexto = 'b. Educación escolar no-formal (septiembre a diciembre 2017). 4 Talleres didácticos en escuela multigrado. Incluyó evaluación inicial y final. Se trabajó en 4 talleres que incluían descripción de la especie, amenazas, importancia de su conservación y toma de compromisos.<br>d. Educación adultos (diciembre 2017). 1 Taller con los apoderados de las escuelas para discutir la problemática existente con la presencia de la güiña. Se incluyó un juego con los alumnos, que ya estaban sensibilizados con la protección de la güiña.';
                     }
-                    // MODIFICACIÓN ID 40: Charlas Osorno - ACTUALIZADA
+                    // MODIFICACIÓN ID 40: Charlas Osorno
                     else if (puntoID === 40) {
                         descripcionTexto = 'Iniciativas de Educación y difusión Educación escolar formal Carolina Ugarte y Constanza Napolitano dieron charlas para estudiantes sobre la conservación de la guiña en dos escuelas locales en Osorno, sur de Chile: (i) Colegio Francés, (ii) Colegio Santa Marta, en octubre de 2023.';
                     }
